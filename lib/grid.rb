@@ -1,6 +1,5 @@
 class Grid
-  attr_reader :dimension
-  attr_accessor :cells
+  attr_reader :dimension, :cells
 
   def living_cell?(row, column)
     within_bound?(row, column) && cells[row][column]

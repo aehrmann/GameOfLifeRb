@@ -1,10 +1,10 @@
 require 'grid'
-require 'grid_parser'
+require 'grid_factory'
 
 describe Grid do
 
   describe "checking a cell's living status" do
-    before(:each) { @grid = GridParser.empty_grid(10) }
+    before(:each) { @grid = GridFactory.empty_grid(10) }
 
     it "returns false if there is no cell at the given coordinates" do
       expect(@grid.living_cell?(2, 8)).to be false
@@ -22,7 +22,7 @@ describe Grid do
     end
 
     describe "retrieving the number of living neighbors for a cell" do
-      before(:each) { @grid = GridParser.empty_grid(10) }
+      before(:each) { @grid = GridFactory.empty_grid(10) }
 
       it "returns 0 for a cell with no living neighbors" do
         expect(@grid.count_living_neighbors(1, 9)).to eq(0)
@@ -51,12 +51,12 @@ describe Grid do
 
     describe "finding cells to change" do
       it "returns no cell coordinates for an empty grid" do
-        grid = GridParser.empty_grid(10)
+        grid = GridFactory.empty_grid(10)
         expect(grid.cells_to_update).to eq([])
       end
 
       it "returns live cells with fewer than 2 living neighbors" do
-        grid = GridParser.empty_grid(10)
+        grid = GridFactory.empty_grid(10)
         grid.spawn_cell_at(1, 2)
         grid.spawn_cell_at(4, 7)
         grid.spawn_cell_at(3, 7)
@@ -66,7 +66,7 @@ describe Grid do
       end
 
       it "returns live cells with more than 3 living neighbors" do
-        grid = GridParser.empty_grid(10)
+        grid = GridFactory.empty_grid(10)
         grid.spawn_cell_at(1, 3)
 
         grid.spawn_cell_at(2, 2)
@@ -78,7 +78,7 @@ describe Grid do
       end
 
       it "returns dead cells with exactly 3 living neighbors" do
-        grid = GridParser.empty_grid(10)
+        grid = GridFactory.empty_grid(10)
         grid.spawn_cell_at(0, 1)
         grid.spawn_cell_at(1, 0)
         grid.spawn_cell_at(1, 1)
@@ -89,11 +89,11 @@ describe Grid do
 
     describe "one tick" do
       it "returns an updated version of the grid" do
-        grid_before = GridParser.from_string_array([ '@_@_',
+        grid_before = GridFactory.from_string_array([ '@_@_',
                                                      '__@_',
                                                      '@@__',
                                                      '@@__'])
-        grid_after = GridParser.from_string_array(['_@__',
+        grid_after = GridFactory.from_string_array(['_@__',
                                                    '@_@_',
                                                    '@_@_',
                                                    '@@__'])

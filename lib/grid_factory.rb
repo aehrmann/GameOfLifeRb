@@ -1,4 +1,4 @@
-module GridParser
+module GridFactory
 
   class ImproperFormatError < StandardError; end
 

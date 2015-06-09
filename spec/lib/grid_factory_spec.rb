@@ -1,11 +1,11 @@
 require 'grid'
-require 'grid_parser'
+require 'grid_factory'
 
-describe GridParser do
+describe GridFactory do
   describe "creating a grid" do
 
     describe ".empty_grid" do
-      let(:grid) { GridParser.empty_grid(5) }
+      let(:grid) { GridFactory.empty_grid(5) }
 
       it "creates a grid of cells with the given dimension" do
         expect(grid.dimension).to eq(5)
@@ -21,7 +21,7 @@ describe GridParser do
 
     describe ".from_string_array" do
       it "creates a grid from an array of strings" do
-        grid = GridParser.from_string_array(['___',
+        grid = GridFactory.from_string_array(['___',
                                              '@@@',
                                              '_@_'])
 
@@ -33,7 +33,7 @@ describe GridParser do
       end
 
       it "raises an error if the string array is not properly formatted" do
-        expect{ GridParser.from_string_array(['_',
+        expect{ GridFactory.from_string_array(['_',
                                               '___',
                                               '_@_']) }.to raise_error
       end
