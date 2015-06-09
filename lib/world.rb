@@ -1,12 +1,28 @@
 class World
-  attr_reader :dimension, :cells
+  attr_reader :dimension
+  attr_accessor :cells
+
+  class ImproperFormatError < StandardError; end
+
   def initialize(dimension)
     @cells = Array.new(dimension) { Array.new(dimension, false) }
     @dimension = dimension
   end
 
+  def self.from_string_array(string_array)
+    if string_array.any? { |str| str.gsub(/,/, '').length != string_array.length }
+      raise ImproperFormatError, "string array is improperly formatted"
+    end
+    new_cells = string_array.map do |string|
+      string.each_char.map { |char| char == '@' }
+    end
+    new_world = World.new(string_array.length)
+    new_world.cells = new_cells
+    new_world
+  end
+
   def living_cell?(row, column)
-     within_bound?(row, column) && cells[row][column]
+    within_bound?(row, column) && cells[row][column]
   end
 
   def within_bound?(row, column)

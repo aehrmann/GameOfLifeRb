@@ -2,8 +2,8 @@ require 'world'
 
 describe World do
   describe "creating a world" do
-    let(:world) { World.new(5) }
     describe "#new" do
+      let(:world) { World.new(5) }
       it "creates a grid of cells with the given dimension" do
         expect(world.dimension).to eq(5)
       end
@@ -13,6 +13,24 @@ describe World do
           row.all? { |cell| cell == false }
         end
         expect(all_dead).to be true
+      end
+    end
+
+    describe ".from_string_array" do
+      it "creates a world from an array of strings" do
+        world = World.from_string_array(['___',
+                                         '@@@',
+                                         '_@_'])
+
+        expected_cells = [[false, false, false],
+                          [true, true, true],
+                          [false, true, false]]
+
+        expect(world.cells).to eq(expected_cells)
+      end
+
+      it "raises an error if the string array is not properly formatted" do
+        expect{ World.from_string_array(['_','___','_@_']) }.to raise_error
       end
     end
   end
@@ -102,18 +120,19 @@ describe World do
     end
   end
 
-  #describe "one tick" do
-    #it "updates the appropriate cells" do
-      #grid_before = Grid.from_strings(['@,_,_,@,_',
-                                       #'_,@,_,@,_',
-                                       #'_,_,_,@,@',
-                                       #'_,_,_,@,@',
-                                       #'@,_,_,@,_'])
-      #grid_after = Grid.from_strings(['_,_,@,_,_',
-                                      #'_,_,_@_,_',
-                                      #'_,_,_,_,_',
-                                      #'_,_,_,_,_',
-                                      #'_,_,_,@,@'])
-    #end
-  #end
+  describe "one tick" do
+    it "updates the appropriate cells" do
+      grid_before = World.from_string_array(['@__@_',
+                                             '_@_@_',
+                                             '___@@',
+                                             '___@@',
+                                             '@__@_'])
+      grid_after = World.from_string_array(['__@__',
+                                            '__@__',
+                                            '_____',
+                                            '_____',
+                                            '___@@'])
+      expect(grid_before.tick).to eq(grid_after)
+    end
+  end
 end
