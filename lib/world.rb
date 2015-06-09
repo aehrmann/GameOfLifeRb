@@ -1,14 +1,39 @@
+require 'pry'
+
 class World
+  attr_reader :dimension, :cells
   def initialize(dimension)
     @cells = Array.new(dimension) { Array.new(dimension, false) }
+    @dimension = dimension
   end
 
   def living_cell?(row, column)
-    @cells[row][column]
+     within_bound?(row, column) && cells[row][column]
+  end
+
+  def within_bound?(row, column)
+    row < dimension && row >= 0 && column < dimension && column >= 0
   end
 
   def spawn_cell_at(row, column)
-    @cells[row][column] = true
+    cells[row][column] = true
+  end
+
+  def cells_to_update
+    results = []
+    (0...dimension).each do |row|
+      (0...dimension).each do |col|
+        if living_cell?(row, col)
+          living_neighbors = count_living_neighbors(row, col)
+          if living_neighbors < 2 || living_neighbors > 3
+            results += [[row, col]]
+          end
+        elsif count_living_neighbors(row, col) == 3
+          results += [[row, col]]
+        end
+      end
+    end
+    results
   end
 
   def count_living_neighbors(row, col)
