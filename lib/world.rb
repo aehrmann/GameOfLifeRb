@@ -33,15 +33,29 @@ class World
     cells[row][column] = true
   end
 
+  def tick
+    new_cells = cells.clone
+
+    cells_to_update.each { |(row, col)| new_cells[row][col] = !cells[row][col] }
+
+    new_world = World.new(dimension)
+    new_world.cells = new_cells
+    new_world
+  end
+
   def cells_to_update
     results = []
     (0...dimension).each do |row|
       (0...dimension).each do |col|
         living_neighbors = count_living_neighbors(row, col)
-        if living_cell?(row, col) && living_neighbors < 2 || living_neighbors > 3
-          results += [[row, col]]
-        elsif living_neighbors == 3
-          results += [[row, col]]
+        if living_cell?(row, col)
+          if living_neighbors < 2 || living_neighbors > 3
+            results += [[row, col]]
+          end
+        else
+          if living_neighbors == 3
+            results += [[row, col]]
+          end
         end
       end
     end
@@ -57,8 +71,8 @@ class World
 
   def all_neighbor_coordinates(row, col)
     top_neighbor_coordinates(row, col) +
-    side_neighbor_coordinates(row, col) +
-    bottom_neighbor_coordinates(row, col)
+      side_neighbor_coordinates(row, col) +
+      bottom_neighbor_coordinates(row, col)
   end
 
   def top_neighbor_coordinates(row, col)
@@ -71,5 +85,13 @@ class World
 
   def bottom_neighbor_coordinates(row, col)
     [[row + 1, col - 1], [row + 1, col], [row + 1, col + 1]]
+  end
+
+  def ==(other)
+    self.cells == other.cells
+  end
+
+  def eql?(other)
+    self == other
   end
 end

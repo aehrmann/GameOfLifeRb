@@ -121,18 +121,56 @@ describe World do
   end
 
   describe "one tick" do
-    it "updates the appropriate cells" do
-      grid_before = World.from_string_array(['@__@_',
-                                             '_@_@_',
-                                             '___@@',
-                                             '___@@',
-                                             '@__@_'])
-      grid_after = World.from_string_array(['__@__',
-                                            '__@__',
-                                            '_____',
-                                            '_____',
-                                            '___@@'])
-      expect(grid_before.tick).to eq(grid_after)
+    it "follows rule 1: live cell with less than 2 live neighbors dies" do
+      world_before_one = World.from_string_array(['___',
+                                                  '_@_',
+                                                  '___'])
+
+      world_before_two = World.from_string_array(['___',
+                                                  '_@@',
+                                                  '___'])
+
+      world_after = World.from_string_array(['___',
+                                             '___',
+                                             '___'])
+
+      expect(world_before_one.tick).to eq(world_after)
+      expect(world_before_two.tick).to eq(world_after)
+    end
+
+    it "follows rule 2: live cell with 2 or 3 live neighbors lives" do
+      world_before = World.from_string_array(['@@_',
+                                              '@__',
+                                              '___'])
+
+      world_after = World.from_string_array(['@@_',
+                                             '@@_',
+                                             '___'])
+
+      expect(world_before.tick).to eq(world_after)
+    end
+
+    it "follows rule 3: live cell with more than 3 live neighbors dies" do
+      world_before = World.from_string_array(['@@@',
+                                              '_@_',
+                                              '_@_'])
+
+      world_after = World.from_string_array(['@@@',
+                                             '___',
+                                             '___'])
+
+      expect(world_before.tick).to eq(world_after)
+    end
+
+    it "follows rule 4: dead cell with exactly 3 live neighbors dies" do
+      world_before = World.from_string_array(['@@@',
+                                              '___',
+                                              '___'])
+      world_after = World.from_string_array(['_@_',
+                                             '_@_',
+                                             '___'])
+
+      expect(world_before.tick).to eq(world_after)
     end
   end
 end
