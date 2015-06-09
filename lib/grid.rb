@@ -1,4 +1,4 @@
-class World
+class Grid
   attr_reader :dimension
   attr_accessor :cells
 
@@ -16,7 +16,7 @@ class World
     new_cells = string_array.map do |string|
       string.each_char.map { |char| char == '@' }
     end
-    new_world = World.new(string_array.length)
+    new_world = Grid.new(string_array.length)
     new_world.cells = new_cells
     new_world
   end
@@ -38,7 +38,7 @@ class World
 
     cells_to_update.each { |(row, col)| new_cells[row][col] = !cells[row][col] }
 
-    new_world = World.new(dimension)
+    new_world = Grid.new(dimension)
     new_world.cells = new_cells
     new_world
   end
