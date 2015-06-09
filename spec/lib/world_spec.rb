@@ -1,6 +1,22 @@
 require 'world'
 
 describe World do
+  describe "creating a world" do
+    let(:world) { World.new(5) }
+    describe "#new" do
+      it "creates a grid of cells with the given dimension" do
+        expect(world.dimension).to eq(5)
+      end
+
+      it "sets all cells to dead" do
+        all_dead = world.cells.all? do |row|
+          row.all? { |cell| cell == false }
+        end
+        expect(all_dead).to be true
+      end
+    end
+  end
+
   describe "checking a cell's living status" do
     before(:each) { @world = World.new(10) }
 
@@ -85,4 +101,19 @@ describe World do
       expect(world.cells_to_update).to include([0, 0])
     end
   end
+
+  #describe "one tick" do
+    #it "updates the appropriate cells" do
+      #grid_before = Grid.from_strings(['@,_,_,@,_',
+                                       #'_,@,_,@,_',
+                                       #'_,_,_,@,@',
+                                       #'_,_,_,@,@',
+                                       #'@,_,_,@,_'])
+      #grid_after = Grid.from_strings(['_,_,@,_,_',
+                                      #'_,_,_@_,_',
+                                      #'_,_,_,_,_',
+                                      #'_,_,_,_,_',
+                                      #'_,_,_,@,@'])
+    #end
+  #end
 end

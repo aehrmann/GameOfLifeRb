@@ -1,5 +1,3 @@
-require 'pry'
-
 class World
   attr_reader :dimension, :cells
   def initialize(dimension)
@@ -23,12 +21,10 @@ class World
     results = []
     (0...dimension).each do |row|
       (0...dimension).each do |col|
-        if living_cell?(row, col)
-          living_neighbors = count_living_neighbors(row, col)
-          if living_neighbors < 2 || living_neighbors > 3
-            results += [[row, col]]
-          end
-        elsif count_living_neighbors(row, col) == 3
+        living_neighbors = count_living_neighbors(row, col)
+        if living_cell?(row, col) && living_neighbors < 2 || living_neighbors > 3
+          results += [[row, col]]
+        elsif living_neighbors == 3
           results += [[row, col]]
         end
       end
