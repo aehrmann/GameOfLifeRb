@@ -38,5 +38,21 @@ describe GridFactory do
                                               '_@_']) }.to raise_error
       end
     end
+
+    describe ".from_parsed_input" do
+      it "parses the string contents of a file" do
+        contents = <<-eos
+          ____
+          __@_
+          _@__
+          _@__
+        eos
+        expected_grid = GridFactory.from_string_array(['____',
+                                                       '__@_',
+                                                       '_@__',
+                                                       '_@__'])
+        expect(GridFactory.from_parsed_input(contents)).to eq(expected_grid)
+      end
+    end
   end
 end

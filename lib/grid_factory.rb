@@ -5,6 +5,11 @@ module GridFactory
 
   class ImproperFormatError < StandardError; end
 
+  def self.from_parsed_input(contents)
+    string_array = contents.split("\n").map { |line| line.strip }
+    self.from_string_array(string_array)
+  end
+
   def self.from_string_array(string_array)
     if string_array.any? { |str| str.gsub(/,/, '').length != string_array.length }
       raise ImproperFormatError, "string array is improperly formatted"
