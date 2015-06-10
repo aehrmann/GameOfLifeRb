@@ -3,4 +3,5 @@ class Cell
   def initialize(row, column)
     @row, @col = row, column
   end
+
 end

@@ -6,7 +6,7 @@ describe Grid do
   describe "checking a cell's living status" do
     before(:each) { @grid = GridFactory.empty_grid(10) }
 
-    it "returns false if there is no cell at the given coordinates" do
+    it "returns false if there is no cell at the given index pairs" do
       expect(@grid.living_cell?(2, 8)).to be false
     end
 
@@ -15,7 +15,7 @@ describe Grid do
       expect(@grid.living_cell?(5, 2)).to be true
     end
 
-    it "returns false if the coordinates are outside of the grid's bounds" do
+    it "returns false if the index pairs are outside of the grid's bounds" do
       expect(@grid.living_cell?(0, 20)).to be false
       expect(@grid.living_cell?(20, 0)).to be false
       expect(@grid.living_cell?(-10, 0)).to be false
@@ -50,7 +50,7 @@ describe Grid do
     end
 
     describe "finding cells that will be updated on the next tick" do
-      it "returns no cell coordinates for an empty grid" do
+      it "returns no cell index pairs for an empty grid" do
         grid = GridFactory.empty_grid(10)
         expect(grid.cells_to_update).to eq([])
       end
