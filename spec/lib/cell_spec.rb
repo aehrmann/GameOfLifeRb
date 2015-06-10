@@ -63,4 +63,13 @@ describe Cell do
       end
     end
   end
+  
+  describe "comparing two cells" do
+    it "compares index pairs and mortal status" do
+      expect(Cell.new(2, 2, true)).to eq(Cell.new(2, 2, true))
+      expect(Cell.new(2, 2)).not_to eq(Cell.new(2, 2, true))
+      expect(Cell.new(3, 3, false)).not_to eq(Cell.new(3, 3, true))
+    end
+  end
+
 end

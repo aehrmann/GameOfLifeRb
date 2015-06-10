@@ -28,6 +28,10 @@ class Cell
     end
   end
 
+  def ==(other)
+    self.row == other.row && self.col == other.col && self.alive? == other.alive?
+  end
+
   private
 
   def within_bounds?(row, col, max_width)
