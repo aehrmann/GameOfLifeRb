@@ -19,21 +19,34 @@ class Grid
 
   def cells_to_update
     results = []
-    (0...dimension).each do |row|
-      (0...dimension).each do |col|
-        living_neighbors = cell_at(row, col).number_of_living_neighbors(self)
-        if cell_at(row, col).alive?
-          if living_neighbors < 2 || living_neighbors > 3
-            results.push(cell_at(row, col))
-          end
-        else
-          if living_neighbors == 3
-            results.push(cell_at(row, col))
-          end
-        end
+    self.each_cell do |cell|
+      if cell.alive?
+        results.push(cell) if overpopulated?(cell) || underpopulated?(cell)
+      else 
+        results.push(cell) if can_reproduce?(cell)
       end
     end
     results
+  end
+
+  def overpopulated?(cell)
+    cell.number_of_living_neighbors(self) > 3
+  end
+
+  def underpopulated?(cell)
+    cell.number_of_living_neighbors(self) < 2
+  end
+
+  def can_reproduce?(cell)
+    cell.number_of_living_neighbors(self) == 3
+  end
+
+  def each_cell
+    (0...dimension).each do |row|
+      (0...dimension).each do |col|
+        yield cell_at(row, col)
+      end
+    end
   end
 
   def ==(other)
