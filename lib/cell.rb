@@ -22,9 +22,16 @@ class Cell
     @alive = false
   end
 
-  def neighbor_index_pairs(max_width)
+  def number_of_living_neighbors(grid)
+    neighbor_index_pairs(grid).reduce(0) do |count, (row, col)|
+      count += 1 if grid.cell_at(row, col).alive?
+      count
+    end
+  end
+
+  def neighbor_index_pairs(grid)
     all_neighbor_index_pairs(self.row, self.col).select do |(row, col)|
-      within_bounds?(row, col, max_width)
+      within_bounds?(row, col, grid.dimension)
     end
   end
 
