@@ -13,7 +13,7 @@ describe GridFactory do
 
       it "sets all cells to dead" do
         all_dead = grid.cells.all? do |row|
-          row.all? { |cell| cell == false }
+          row.all? { |cell| !cell.alive? }
         end
         expect(all_dead).to be true
       end
@@ -25,9 +25,9 @@ describe GridFactory do
                                              '@@@',
                                              '_@_'])
 
-        expected_cells = [[false, false, false],
-                          [true, true, true],
-                          [false, true, false]]
+        expected_cells = [[Cell.new(0, 0), Cell.new(0, 1), Cell.new(0, 2)],
+                          [Cell.new(1, 0, true), Cell.new(1, 1, true), Cell.new(1, 2, true)],
+                          [Cell.new(2, 0), Cell.new(2, 1, true), Cell.new(2, 2)]]
 
         expect(grid.cells).to eq(expected_cells)
       end
