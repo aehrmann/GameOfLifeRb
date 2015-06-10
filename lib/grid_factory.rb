@@ -1,4 +1,5 @@
 require 'cell'
+require 'grid'
 
 module GridFactory
 
