@@ -3,9 +3,23 @@ class Cell
                       [0, -1],[0, 1],
                       [1, -1],[1, 0],[1, 1]]
 
-  attr_reader :row, :col
+  attr_reader :row, :col 
+
   def initialize(row, column)
     @row, @col = row, column
+    @alive = false
+  end
+
+  def alive?
+    @alive
+  end
+
+  def live!
+    @alive = true
+  end
+
+  def die!
+    @alive = false
   end
 
   def neighbor_index_pairs(max_width)

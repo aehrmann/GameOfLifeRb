@@ -2,10 +2,32 @@ require 'cell'
 
 describe Cell do
   describe "creating a cell" do
+    before(:each) { @cell = Cell.new(3, 5) }
+
     it "requires a row and a column" do
-      cell = Cell.new(3, 5)
-      expect(cell.row).to eq(3)
-      expect(cell.col).to eq(5)
+      expect(@cell.row).to eq(3)
+      expect(@cell.col).to eq(5)
+    end
+
+    it "starts out dead" do
+      expect(@cell.alive?).to be false
+    end
+  end
+
+  describe "changing mortal status" do
+    before(:each) { @cell = Cell.new(3, 3) }
+
+    it "can come back to life" do
+      @cell.live!
+
+      expect(@cell.alive?).to be true
+    end
+
+    it "can die" do
+      @cell.live!
+      @cell.die!
+
+      expect(@cell.alive?).to be false
     end
   end
 
