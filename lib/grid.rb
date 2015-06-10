@@ -2,10 +2,10 @@ class Grid
   attr_reader :dimension, :cells
 
   def living_cell?(row, column)
-    within_bound?(row, column) && cells[row][column]
+    within_bounds?(row, column) && cells[row][column]
   end
 
-  def within_bound?(row, column)
+  def within_bounds?(row, column)
     row < dimension && row >= 0 && column < dimension && column >= 0
   end
 
