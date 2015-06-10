@@ -5,9 +5,9 @@ class Cell
 
   attr_reader :row, :col 
 
-  def initialize(row, column)
+  def initialize(row, column, alive = false)
     @row, @col = row, column
-    @alive = false
+    @alive = alive
   end
 
   def alive?

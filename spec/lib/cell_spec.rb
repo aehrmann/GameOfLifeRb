@@ -9,8 +9,13 @@ describe Cell do
       expect(@cell.col).to eq(5)
     end
 
-    it "starts out dead" do
+    it "starts out dead by default" do
       expect(@cell.alive?).to be false
+    end
+
+    it "can be set to living on creation" do
+      cell = Cell.new(3, 5, true)
+      expect(cell.alive?).to be true
     end
   end
 
