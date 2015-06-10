@@ -12,7 +12,7 @@ while running
     system "clear"
     puts grid
     grid = grid.tick
-    sleep 0.25
+    sleep 0.1
   rescue Interrupt
     system "clear"
     puts "Goodbye!"
