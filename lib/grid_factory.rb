@@ -1,5 +1,5 @@
-require 'cell'
-require 'grid'
+require_relative 'cell'
+require_relative 'grid'
 
 module GridFactory
 

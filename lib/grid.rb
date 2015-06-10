@@ -53,6 +53,46 @@ class Grid
     self.cells == other.cells
   end
 
+  def to_s
+    s = ""
+    s += "=" * ((3 * dimension) + 3)
+    s += "\n"
+
+    (1...dimension).each do |row|
+      s += "|-"
+
+      (0...dimension).each do |col|
+        if cell_at(row, col).alive?
+          s += "@" * 2
+          s += "-"
+        else
+          s += "-" * 3
+        end
+      end
+      s += "|\n"
+
+      s += "|-"
+      (0...dimension).each do |col|
+        if cell_at(row, col).alive?
+          s += "@" * 2
+          s += "-"
+        else
+          s += "-" * 3
+        end
+      end
+      s += "|\n"
+
+      unless row == dimension - 1
+        s += "|"
+        s +=  "-" * ((3 * dimension) + 1)
+        s += "|\n"
+      end
+    end
+    s += "=" * ((3 * dimension) + 3)
+    s += "\n"
+    s
+  end
+
   private
 
   def initialize(dimension, cells)
