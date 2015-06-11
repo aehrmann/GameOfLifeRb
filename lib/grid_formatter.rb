@@ -1,59 +1,75 @@
 class GridFormatter
-  attr_reader :grid
+  HORIZONTAL_PADDING = 4
+  VERTICAL_LINE_PADDING = 2
+
+  attr_reader :grid, :center_width
+
   def initialize(grid)
     @grid = grid
+    @center_width = (grid.dimension * 2) - 1
+    @dimension_indexes = (0...grid.dimension)
   end
 
   def as_string
-    horizontal_padding = line_padding = 2
-    grid_display_width = (3 * grid.dimension)
+    grid_header + grid_display_string + grid_footer
+  end
 
-    s = ""
+  private
 
-    s += separator(grid_display_width, horizontal_padding)
-    s += vertical_padding(grid_display_width, line_padding)
+  def grid_header
+    bar + empty_lines(VERTICAL_LINE_PADDING)
+  end
 
-    grid.cells.each.with_index do |row, row_index|
-      s += row_display_string(row_index, horizontal_padding)
+  def grid_footer
+    empty_lines(VERTICAL_LINE_PADDING) + bar
+  end
+
+  def grid_display_string
+    @dimension_indexes.reduce("") do |string, row|
+      string << string_for_row(row)
     end
-    s += vertical_padding(grid_display_width, line_padding)
-    s += separator(grid_display_width, horizontal_padding)
-    s
   end
 
-  def row_display_string(row, padding)
-    s = ""
-    s += row_start_string(padding)
+  def string_for_cell(row, col)
+    last_column?(col) ? character_for_cell(row, col) : character_for_cell(row, col) + '-'
+  end
 
-    grid.cells[row].each.with_index do |col, col_index|
-      s += cell_display_string(row, col_index)
+  def last_column?(column)
+    column + 1 == grid.dimension
+  end
+
+  def character_for_cell(row, col)
+    grid.cell_at(row, col).alive? ? '@' : '-'
+  end
+
+  def string_for_row(row)
+    row_left + string_for_grid_row(row) + row_right + "\n"
+  end
+
+  def string_for_grid_row(row)
+    @dimension_indexes.reduce("") do |string, col|
+      string << string_for_cell(row, col)
     end
-
-    s += row_end_string(padding)
-    s
   end
 
-  def row_start_string(padding)
-    "|" + ("-" * padding)
+  def row_right
+    ('-' * HORIZONTAL_PADDING) + '|'
   end
 
-  def row_end_string(padding)
-    ("-" * padding) + "-|\n"
+  def row_left
+    '|' + ('-' * HORIZONTAL_PADDING) 
   end
 
-  def cell_display_string(row, col)
-    grid.cell_at(row, col).alive? ? "-@" : "--"
+  def empty_lines(count)
+    empty_line * count
   end
 
-  def separator(width, padding)
-    ("=" * (width + padding)) + "\n"
+  def empty_line
+    '|' + ('-' * HORIZONTAL_PADDING) + ('-' * center_width) + ('-' * HORIZONTAL_PADDING) + '|' + "\n"
   end
 
-  def vertical_padding(width, lines)
-    padding_line(width) * lines
+  def bar
+    '=' * ((2 * grid.dimension) + (HORIZONTAL_PADDING * 2) + 1) + "\n"
   end
 
-  def padding_line(width)
-    "|" + ("-" * width) + "|\n"
-  end
 end
