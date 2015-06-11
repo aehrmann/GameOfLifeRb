@@ -29,18 +29,6 @@ class Grid
     results
   end
 
-  def overpopulated?(cell)
-    cell.number_of_living_neighbors(self) > 3
-  end
-
-  def underpopulated?(cell)
-    cell.number_of_living_neighbors(self) < 2
-  end
-
-  def can_reproduce?(cell)
-    cell.number_of_living_neighbors(self) == 3
-  end
-
   def each_cell
     (0...dimension).each do |row|
       (0...dimension).each do |col|
@@ -48,6 +36,14 @@ class Grid
       end
     end
   end
+
+  def all_cells_dead?
+    self.each_cell do |cell|
+      return false if cell.alive?
+    end
+    true
+  end
+
 
   def ==(other)
     self.cells == other.cells
@@ -58,5 +54,17 @@ class Grid
   def initialize(dimension, cells)
     @cells = cells
     @dimension = dimension
+  end
+
+  def overpopulated?(cell)
+    cell.number_of_living_neighbors(self) > 3
+  end
+
+  def underpopulated?(cell)
+    cell.number_of_living_neighbors(self) < 2
+  end
+
+  def can_reproduce?(cell)
+    cell.number_of_living_neighbors(self) == 3
   end
 end

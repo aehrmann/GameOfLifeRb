@@ -42,6 +42,19 @@ describe Grid do
     end
   end
 
+  describe "reporting if all cells are dead" do
+    it "returns true if there are no living cells" do
+      grid = GridFactory.from_string_array(["_@",
+                                            "@@"])
+      expect(grid.all_cells_dead?).to be false
+    end
+
+    it "returns true if there are no living cells" do
+      grid = GridFactory.empty_grid(10)
+      expect(grid.all_cells_dead?).to be true
+    end
+  end
+
   describe "one tick" do
     it "returns an updated version of the grid" do
       grid_before = GridFactory.from_string_array([ '@_@_',
