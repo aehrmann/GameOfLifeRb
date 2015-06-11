@@ -1,4 +1,4 @@
-require 'grid_formatter'
+require_relative './grid_formatter'
 
 class Runner
   attr_reader :grid, :out_stream
