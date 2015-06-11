@@ -55,29 +55,4 @@ describe Grid do
       expect(grid_before.tick).to eq(grid_after)
     end
   end
-
-  describe "displaying a grid" do
-    it "displays a grid with living cells marked with '@'" do
-      grid = GridFactory.from_string_array(['_____',
-                                            '__@__',
-                                            '@@@@@',
-                                            '@@_@_',
-                                            '____@'])
-      expected_output = ""
-      expected_output += "==================\n"
-      expected_output += "|-------@@-------|\n"
-      expected_output += "|-------@@-------|\n"
-      expected_output += "|----------------|\n"
-      expected_output += "|-@@-@@-@@-@@-@@-|\n"
-      expected_output += "|-@@-@@-@@-@@-@@-|\n"
-      expected_output += "|----------------|\n"
-      expected_output += "|-@@-@@----@@----|\n"
-      expected_output += "|-@@-@@----@@----|\n"
-      expected_output += "|----------------|\n"
-      expected_output += "|-------------@@-|\n"
-      expected_output += "|-------------@@-|\n"
-      expected_output += "==================\n"
-      expect(grid.to_s).to eq(expected_output)
-    end
-  end
 end
