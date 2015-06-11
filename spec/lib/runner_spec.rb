@@ -35,6 +35,16 @@ describe Runner do
     end
   end
 
+  describe "stopping a game" do
+    it 'stops a game' do
+      runner = Runner.new(GridFactory.empty_grid(10))
+      runner.start
+
+      runner.stop
+      expect(runner.running?).to be false
+    end
+  end
+
   describe 'a step in the game' do
     before(:all) do
       @empty_grid = GridFactory.empty_grid(10)

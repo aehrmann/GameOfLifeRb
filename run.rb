@@ -4,13 +4,26 @@
 
 require_relative 'lib/grid_factory'
 require_relative 'lib/grid_formatter'
+require_relative 'lib/runner'
 
-glider_contents = File.read("glider.txt")
+if ARGV.length == 2
+  filename = ARGV[1]
+  if File.exists?(filename)
+    contents = File.read(filename)
+    grid = GridFactory.from_parsed_input(contents)
+  else
+    puts "Can't find #{filename}. Check to make sure the file exists in the current directory."
+    exit
+  end
+else
+  puts "First argument should be a file name."
+  exit
+end
 
-grid = GridFactory.from_parsed_input(glider_contents)
+runner = Runner.new(grid)
 
-running = true
-while running
+runner.start
+while runner.running?
   begin
     system "clear"
     puts GridFormatter.new(grid).as_string
@@ -19,6 +32,6 @@ while running
   rescue Interrupt
     system "clear"
     puts "Goodbye!"
-    running = false
+    runner.stop
   end
 end

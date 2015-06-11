@@ -18,9 +18,13 @@ class Runner
     self.running = true
   end
 
+  def stop
+    self.running = false
+  end
+
   def step
     if grid.all_cells_dead?
-      self.running = false
+      stop
     end
     out_stream.puts GridFormatter.new(grid).as_string
   end
