@@ -37,34 +37,6 @@ describe Cell do
       expect(@cell.alive?).to be false
     end
   end
-
-  describe "generating neighbors index pairs" do
-    before(:each) { @grid = GridFactory.empty_grid(5) }
-
-    context "when the cell is touching an edge" do
-      it "generates all legal index pairs for a cell in the left most column" do
-        cell = Cell.new(3, 0)
-        expected_index_pairs = [[2, 0],[2, 1],[3, 1],[4, 0],[4, 1]]
-
-        expect(cell.neighbor_index_pairs(@grid)).to eq(expected_index_pairs)
-      end
-
-      it "generates all legal index pairs for a cell in the right most column" do
-        cell = Cell.new(3, 4)
-        expected_index_pairs = [[2, 3],[2, 4],[3, 3],[4, 3],[4, 4]]
-
-        expect(cell.neighbor_index_pairs(@grid)).to eq(expected_index_pairs)
-      end
-    end
-
-    context "when the cell is not touching any edges" do
-      it "generates generates index pairs for all 8 neighbors" do
-        cell = Cell.new(3, 2)
-        expected_index_pairs = [[2, 1],[2, 2],[2, 3],[3, 1],[3, 3],[4, 1],[4, 2],[4, 3]]
-        expect(cell.neighbor_index_pairs(@grid)).to eq(expected_index_pairs)
-      end
-    end
-  end
   
   describe "counting a cell's living neighbors" do
     it "returns the number of living neighboring cells" do
@@ -74,6 +46,15 @@ describe Cell do
       cell = Cell.new(1, 1)
 
       expect(cell.number_of_living_neighbors(grid)).to eq(5)
+    end
+
+    it "returns the number of living neighboring cells for different grids" do
+      grid = GridFactory.from_string_array(["__@",
+                                            "_@_",
+                                            "@_@"])
+      cell = Cell.new(1, 1)
+
+      expect(cell.number_of_living_neighbors(grid)).to eq(3)
     end
   end
 

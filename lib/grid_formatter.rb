@@ -3,8 +3,8 @@ class GridFormatter
 
   def initialize(grid)
     @grid = grid
-    @center_width = (grid.dimension * 2) - 1
-    @dimension_indexes = (0...grid.dimension)
+    @max_row = grid.locations.keys.max_by { |(row, _)| row }[0]
+    @dimension_indexes = (0...@max_row)
   end
 
   def as_string
@@ -36,7 +36,8 @@ class GridFormatter
   end
 
   def character_for_cell(row, col)
-    grid.cell_at(row, col).alive? ? '@' : '-'
+    cell = grid.cell_at(row, col)
+    cell.alive? ? '@' : '-'
   end
 
   def string_for_row(row)
@@ -54,7 +55,7 @@ class GridFormatter
   end
 
   def bar
-    '=' * ((2 * grid.dimension) +  1) + "\n"
+    '=' * ((@max_row + 1) * 2) + "\n"
   end
 
 end

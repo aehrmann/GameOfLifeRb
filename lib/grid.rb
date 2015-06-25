@@ -1,20 +1,29 @@
 class Grid
-  attr_reader :dimension, :cells
+  attr_reader :dimension, :cells, :locations
 
   def cell_at(row, column)
-    cells[row][column]
+    locations[[row, column]]
   end
 
   def spawn_cell_at(row, column)
-    cells[row][column].live!
+    cell = locations[[row, column]]
+    cell.live!
+  end
+
+  def add_neighbors_of(row, column)
+    cell_at(row, column).all_neighbor_index_pairs(row, column).each do |(neighbor_row, neighbor_col)|
+      if !locations.has_key?([ neighbor_row, neighbor_col ])
+        locations[[neighbor_row, neighbor_col]] = Cell.new(neighbor_row, neighbor_col, false)
+      end
+    end
   end
 
   def tick
-    new_cells = cells.clone
+    new_locations = locations.clone
 
     cells_to_update.each { |cell| cell.alive? ? cell.die! : cell.live! }
 
-    Grid.new(dimension, new_cells)
+    Grid.new(new_locations)
   end
 
   def cells_to_update
@@ -30,10 +39,8 @@ class Grid
   end
 
   def each_cell
-    (0...dimension).each do |row|
-      (0...dimension).each do |col|
-        yield cell_at(row, col)
-      end
+    locations.keys.each do |(row, col)|
+      yield cell_at(row, col)
     end
   end
 
@@ -54,15 +61,13 @@ class Grid
 
 
   def ==(other)
-    self.cells == other.cells
+    self.locations == other.locations
   end
 
   private
 
-  def initialize(dimension, cells)
-    @cells = cells
-    @locations = {}
-    @dimension = dimension
+  def initialize(locations)
+    @locations = locations
   end
 
   def overpopulated?(cell)

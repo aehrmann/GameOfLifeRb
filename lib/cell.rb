@@ -23,15 +23,12 @@ class Cell
   end
 
   def number_of_living_neighbors(grid)
-    neighbor_index_pairs(grid).reduce(0) do |count, (row, col)|
-      count += 1 if grid.cell_at(row, col).alive?
+    all_neighbor_index_pairs(self.row, self.col).reduce(0) do |count, (row, col)|
+      cell = grid.cell_at(row, col)
+      if !cell.nil?
+        count += 1 if cell.alive?
+      end
       count
-    end
-  end
-
-  def neighbor_index_pairs(grid)
-    all_neighbor_index_pairs(self.row, self.col).select do |(row, col)|
-      within_bounds?(row, col, grid.dimension)
     end
   end
 
@@ -39,14 +36,14 @@ class Cell
     self.row == other.row && self.col == other.col && self.alive? == other.alive?
   end
 
+  def all_neighbor_index_pairs(row, col)
+    NEIGHBOR_OFFSETS.map { |offset_pair| offset_index_pair([row, col], offset_pair) }
+  end
+
   private
 
   def within_bounds?(row, col, max_width)
       row >= 0 && row < max_width && col >= 0 && col < max_width
-  end
-
-  def all_neighbor_index_pairs(row, col)
-    NEIGHBOR_OFFSETS.map { |offset_pair| offset_index_pair([row, col], offset_pair) }
   end
 
   def offset_index_pair((row, col), (row_offset, col_offset))

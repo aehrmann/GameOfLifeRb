@@ -11,22 +11,18 @@ module GridFactory
   end
 
   def self.from_string_array(string_array)
-    new_cells = string_array.map.with_index do |string, row|
-      string.each_char.map.with_index { |char, col| Cell.new(row, col, char == '@') }
+    locations = {}
+    string_array.each.with_index do |string, row|
+      string.each_char.each.with_index do |char, col|
+        locations[[row, col]] = Cell.new(row, col, char == '@')
+      end
     end
-
-    Grid.new(string_array.length, new_cells)
+    Grid.new(locations)
   end
 
   def self.empty_grid(dimension)
-    empty_matrix = Array.new(dimension) { Array.new(dimension) }
-
-    cells = empty_matrix.map.with_index do |row, row_index|
-      empty_matrix[row_index].map.with_index do |cell_value, col_index|
-        Cell.new(row_index, col_index)
-      end
-    end
-
-    Grid.new(dimension, cells)
+    row_string = '_' * dimension
+    string_array = [row_string] * dimension
+    self.from_string_array(string_array)
   end
 end

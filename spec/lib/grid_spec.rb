@@ -18,16 +18,11 @@ describe Grid do
                                             "_@"])
       expect(grid.count_living_cells).to eq(1)
       next_grid = grid.tick
-      expect(grid.count_living_cells).to eq(0)
+      expect(next_grid.count_living_cells).to eq(0)
     end
   end
 
   describe "finding cells that will be updated on the next tick" do
-    it "returns no cell index pairs for an empty grid" do
-      grid = GridFactory.empty_grid(10)
-      expect(grid.cells_to_update).to eq([])
-    end
-
     it "returns live cells with fewer than 2 living neighbors" do
       grid = GridFactory.from_string_array(["@_@",
                                             "__@",
@@ -57,11 +52,6 @@ describe Grid do
       grid = GridFactory.from_string_array(["_@",
                                             "@@"])
       expect(grid.all_cells_dead?).to be false
-    end
-
-    it "returns true if there are no living cells" do
-      grid = GridFactory.empty_grid(10)
-      expect(grid.all_cells_dead?).to be true
     end
   end
 
