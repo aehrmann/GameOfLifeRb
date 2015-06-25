@@ -1,61 +1,38 @@
 class GridFormatter
-  attr_reader :grid, :center_width
+  attr_reader :grid
+
+  WIDTH = 60
+  HEIGHT = 30
+
+  ROW_OFFSET = HEIGHT / 2
+  COL_OFFSET = WIDTH / 2
 
   def initialize(grid)
     @grid = grid
-    @max_row = grid.locations.keys.max_by { |(row, _)| row }[0]
-    @dimension_indexes = (0...@max_row)
+  end
+
+  def blank_grid
+    (('-' * WIDTH) + "\n") * HEIGHT
+  end
+
+  def blank_matrix
+    blank_grid.split("\n").map { |line| line.split(//) }
+  end
+
+  def joined_grid(matrix)
+    matrix.reduce("") do |result, row|
+      result += row.join('') + "\n"
+      result
+    end
   end
 
   def as_string
-    bar + grid_display_string + bar
-  end
+    matrix = blank_matrix
 
-  private
-
-  def grid_header
-    bar
-  end
-
-  def grid_footer
-    bar
-  end
-
-  def grid_display_string
-    @dimension_indexes.reduce("") do |string, row|
-      string << string_for_row(row)
+    grid.locations.each_pair do |(row, col), cell|
+      matrix[row + ROW_OFFSET][col + COL_OFFSET] = '@' if cell.alive?
     end
-  end
 
-  def string_for_cell(row, col)
-    last_column?(col) ? character_for_cell(row, col) : character_for_cell(row, col) + '-'
+    joined_grid(matrix)
   end
-
-  def last_column?(column)
-    column + 1 == grid.dimension
-  end
-
-  def character_for_cell(row, col)
-    cell = grid.cell_at(row, col)
-    cell.alive? ? '@' : '-'
-  end
-
-  def string_for_row(row)
-    '|' + string_for_grid_row(row) + '|' + "\n"
-  end
-
-  def string_for_grid_row(row)
-    @dimension_indexes.reduce("") do |string, col|
-      string << string_for_cell(row, col)
-    end
-  end
-
-  def empty_lines(count)
-    empty_line * count
-  end
-
-  def bar
-    '=' * ((@max_row + 1) * 2) + "\n"
-  end
-
 end
