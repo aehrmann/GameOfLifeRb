@@ -31,12 +31,6 @@ describe GridFactory do
 
         expect(grid.cells).to eq(expected_cells)
       end
-
-      it "raises an error if the string array is not properly formatted" do
-        expect{ GridFactory.from_string_array(['_',
-                                              '___',
-                                              '_@_']) }.to raise_error
-      end
     end
 
     describe ".from_parsed_input" do

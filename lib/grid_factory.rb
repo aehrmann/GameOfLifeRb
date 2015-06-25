@@ -11,10 +11,6 @@ module GridFactory
   end
 
   def self.from_string_array(string_array)
-    if string_array.any? { |str| str.gsub(/,/, '').length != string_array.length }
-      raise ImproperFormatError, "string array is improperly formatted"
-    end
-
     new_cells = string_array.map.with_index do |string, row|
       string.each_char.map.with_index { |char, col| Cell.new(row, col, char == '@') }
     end
