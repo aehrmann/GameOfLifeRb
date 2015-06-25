@@ -37,6 +37,14 @@ class Grid
     end
   end
 
+  def count_living_cells
+    count = 0
+    self.each_cell do |cell|
+      count += 1 if cell.alive?
+    end
+    count
+  end
+
   def all_cells_dead?
     self.each_cell do |cell|
       return false if cell.alive?
@@ -53,6 +61,7 @@ class Grid
 
   def initialize(dimension, cells)
     @cells = cells
+    @locations = {}
     @dimension = dimension
   end
 

@@ -12,6 +12,16 @@ describe Grid do
     end
   end
 
+  describe "getting the number of living cells" do
+    it "counts the number of living cells" do
+      grid = GridFactory.from_string_array(["__",
+                                            "_@"])
+      expect(grid.count_living_cells).to eq(1)
+      next_grid = grid.tick
+      expect(grid.count_living_cells).to eq(0)
+    end
+  end
+
   describe "finding cells that will be updated on the next tick" do
     it "returns no cell index pairs for an empty grid" do
       grid = GridFactory.empty_grid(10)
