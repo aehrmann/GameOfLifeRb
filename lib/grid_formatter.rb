@@ -1,7 +1,4 @@
 class GridFormatter
-  HORIZONTAL_PADDING = 4
-  VERTICAL_LINE_PADDING = 2
-
   attr_reader :grid, :center_width
 
   def initialize(grid)
@@ -11,17 +8,16 @@ class GridFormatter
   end
 
   def as_string
-    grid_header + grid_display_string + grid_footer
+    bar + grid_display_string + bar
   end
 
   private
 
   def grid_header
-    bar #+ empty_lines(VERTICAL_LINE_PADDING)
+    bar
   end
 
   def grid_footer
-    #empty_lines(VERTICAL_LINE_PADDING) + bar
     bar
   end
 
@@ -53,20 +49,8 @@ class GridFormatter
     end
   end
 
-  def row_right
-    ('-' * HORIZONTAL_PADDING) + '|'
-  end
-
-  def row_left
-    '|' + ('-' * HORIZONTAL_PADDING) 
-  end
-
   def empty_lines(count)
     empty_line * count
-  end
-
-  def empty_line
-    '|' + ('-' * HORIZONTAL_PADDING) + ('-' * center_width) + ('-' * HORIZONTAL_PADDING) + '|' + "\n"
   end
 
   def bar
