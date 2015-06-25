@@ -26,8 +26,14 @@ runner.start
 while runner.running?
   begin
     system "clear"
+    puts "=" * 20
+    puts (" " * 10) + grid.count_living_cells.to_s
+    puts "=" * 20
     puts GridFormatter.new(grid).as_string
     grid = grid.tick
+    if grid.all_cells_dead?
+      runner.stop
+    end
     sleep 0.1
   rescue Interrupt
     puts "Goodbye!"
