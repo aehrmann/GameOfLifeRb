@@ -25,7 +25,6 @@ runner = Runner.new(grid)
 runner.start
 while runner.running?
   begin
-    sleep 0.4
     system "clear"
     puts GridFormatter.new(grid).as_string
     grid = grid.tick
