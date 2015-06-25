@@ -17,11 +17,12 @@ class GridFormatter
   private
 
   def grid_header
-    bar + empty_lines(VERTICAL_LINE_PADDING)
+    bar #+ empty_lines(VERTICAL_LINE_PADDING)
   end
 
   def grid_footer
-    empty_lines(VERTICAL_LINE_PADDING) + bar
+    #empty_lines(VERTICAL_LINE_PADDING) + bar
+    bar
   end
 
   def grid_display_string
@@ -43,7 +44,7 @@ class GridFormatter
   end
 
   def string_for_row(row)
-    row_left + string_for_grid_row(row) + row_right + "\n"
+    '|' + string_for_grid_row(row) + '|' + "\n"
   end
 
   def string_for_grid_row(row)
@@ -69,7 +70,7 @@ class GridFormatter
   end
 
   def bar
-    '=' * ((2 * grid.dimension) + (HORIZONTAL_PADDING * 2) + 1) + "\n"
+    '=' * ((2 * grid.dimension) +  1) + "\n"
   end
 
 end

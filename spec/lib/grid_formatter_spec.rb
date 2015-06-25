@@ -12,17 +12,13 @@ describe GridFormatter do
       formatter = GridFormatter.new(grid)
 
       expected_output = ""
-      expected_output += "===================\n"
-      expected_output += "|-----------------|\n"
-      expected_output += "|-----------------|\n"
-      expected_output += "|----@------------|\n"
-      expected_output += "|--------@--------|\n"
-      expected_output += "|----@-@-@-@-@----|\n"
-      expected_output += "|----@-@---@------|\n"
-      expected_output += "|------------@----|\n"
-      expected_output += "|-----------------|\n"
-      expected_output += "|-----------------|\n"
-      expected_output += "===================\n"
+      expected_output += "===========\n"
+      expected_output += "|@--------|\n"
+      expected_output += "|----@----|\n"
+      expected_output += "|@-@-@-@-@|\n"
+      expected_output += "|@-@---@--|\n"
+      expected_output += "|--------@|\n"
+      expected_output += "===========\n"
 
       expect(formatter.as_string).to eq(expected_output)
     end
@@ -37,18 +33,14 @@ describe GridFormatter do
       formatter = GridFormatter.new(grid)
 
       expected_output = ""
-      expected_output += "=====================\n"
-      expected_output += "|-------------------|\n"
-      expected_output += "|-------------------|\n"
-      expected_output += "|--------@----------|\n"
-      expected_output += "|------------@------|\n"
-      expected_output += "|--------@---@-@----|\n"
-      expected_output += "|--------@-@---@----|\n"
-      expected_output += "|------------@------|\n"
-      expected_output += "|----@--------------|\n"
-      expected_output += "|-------------------|\n"
-      expected_output += "|-------------------|\n"
-      expected_output += "=====================\n"
+      expected_output += "=============\n"
+      expected_output += "|----@------|\n"
+      expected_output += "|--------@--|\n"
+      expected_output += "|----@---@-@|\n"
+      expected_output += "|----@-@---@|\n"
+      expected_output += "|--------@--|\n"
+      expected_output += "|@----------|\n"
+      expected_output += "=============\n"
       expect(formatter.as_string).to eq(expected_output)
     end
   end
