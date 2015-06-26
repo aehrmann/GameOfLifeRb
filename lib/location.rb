@@ -9,11 +9,15 @@ class Location
     @row, @column = row, column
   end
 
-  def all_neighbor_index_pairs(location)
-    NEIGHBOR_OFFSETS.map { |offset_pair| offset_index_pair([row, col], offset_pair) }
+  def all_neighbor_locations
+    NEIGHBOR_OFFSETS.map { |offset_pair| offset_location(offset_pair) }
   end
 
-  def offset_index_pair(location, (row_offset, col_offset))
-    [row + row_offset, col + col_offset]
+  def offset_location((row_offset, col_offset))
+    Location.new(row + row_offset, column + col_offset)
+  end
+
+  def ==(other)
+    self.row == other.row && self.column == other.column
   end
 end
