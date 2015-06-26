@@ -8,7 +8,7 @@ describe Grid do
       grid = GridFactory.from_string_array(["__",
                                             "_@"])
 
-      expect(grid.cell_at(1, 1)).to eq(Cell.new(1, 1, true))
+      expect(grid.cell_at(1, 1)).to eq(LivingCell.new(Location.new(1, 1)))
     end
   end
 
@@ -55,6 +55,8 @@ describe Grid do
     end
   end
 
+
+
   describe "one tick" do
     it "returns an updated version of the grid" do
       grid_before = GridFactory.from_string_array([ '@_@_',
@@ -66,6 +68,21 @@ describe Grid do
                                                   '@_@_',
                                                   '@@__'])
       expect(grid_before.tick).to eq(grid_after)
+    end
+  end
+
+
+  describe "adding a new cell" do
+    it "adds its neighbors to the grid" do
+      grid = GridFactory.from_string_array(["",""])
+      grid.spawn_cell_at(10, 10)
+
+     neighboring_locations = [[9, 9], [9, 10], [9, 11],
+                               [10, 9], [10, 11],
+                               [11, 9], [11, 10], [11, 11]]
+      neighboring_locations.each do |(row, col)|
+        expect(grid.cell_at(row, col)).not_to be_nil
+      end
     end
   end
 end

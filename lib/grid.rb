@@ -1,27 +1,46 @@
 class Grid
-  attr_reader :dimension, :cells, :locations
+  attr_accessor :locations
 
   def cell_at(row, column)
     locations[[row, column]]
   end
 
   def spawn_cell_at(row, column)
-    cell = locations[[row, column]]
-    cell.live!
+    if cell_exists_at?(row, column)
+      cell_at(row, column).live!
+    else
+      locations[[row, column]] = LivingCell.new(Location.new(row, column))
+      add_neighbors_of(row, column)
+    end
   end
 
   def add_neighbors_of(row, column)
-    cell_at(row, column).all_neighbor_index_pairs(row, column).each do |(neighbor_row, neighbor_col)|
-      if !locations.has_key?([ neighbor_row, neighbor_col ])
-        locations[[neighbor_row, neighbor_col]] = Cell.new(neighbor_row, neighbor_col, false)
+    neighbor_locations_for_cell_at(row, column).each do |(neighbor_row, neighbor_col)|
+      if !cell_exists_at?(neighbor_row, neighbor_col)
+        locations[[neighbor_row, neighbor_col]] = DeadCell.new(Location.new(neighbor_row, neighbor_col))
       end
     end
+  end
+
+  def neighbor_locations_for_cell_at(row, column)
+    cell_at(row, column).all_neighbor_index_pairs(row, column)
+  end
+
+  def cell_exists_at?(row, column)
+    locations.has_key?([row, column])
   end
 
   def tick
     new_locations = locations.clone
 
-    cells_to_update.each { |cell| cell.alive? ? cell.die! : cell.live! }
+    cells_to_update.each do |cell|
+      if cell.alive?
+        cell.die!
+      else
+        cell.live!
+      end
+      add_neighbors_of(cell.row, cell.col)
+    end
 
     Grid.new(new_locations)
   end
@@ -66,7 +85,7 @@ class Grid
 
   private
 
-  def initialize(locations)
+  def initialize(locations = nil)
     @locations = locations
   end
 

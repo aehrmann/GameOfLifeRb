@@ -11,13 +11,14 @@ module GridFactory
   end
 
   def self.from_string_array(string_array)
-    locations = {}
+    grid = Grid.new({})
     string_array.each.with_index do |string, row|
       string.each_char.each.with_index do |char, col|
-        locations[[row, col]] = Cell.new(row, col, char == '@')
+        grid.locations[[row, col]] = char == '@' ? LivingCell.new(Location.new(row, col)) : DeadCell.new(Location.new(row, col))
+        grid.add_neighbors_of(row, col)
       end
     end
-    Grid.new(locations)
+    grid
   end
 
   def self.empty_grid(dimension)
