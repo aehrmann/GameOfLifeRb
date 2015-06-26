@@ -20,4 +20,8 @@ class Location
   def ==(other)
     self.row == other.row && self.column == other.column
   end
+
+  def to_s
+    "Location(#{row}, #{column})"
+  end
 end
