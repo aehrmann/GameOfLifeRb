@@ -69,5 +69,27 @@ describe Grid do
         end
       end
     end
+
+    describe "#number_of_living_neighbors" do
+
+      context "when the location has no living neighbors" do
+        it "returns 0" do
+          grid = Grid.new
+          expect(grid.number_of_living_neighbors(a_location)).to eq(0)
+        end
+      end
+
+      context "when neighboring locations have living cells" do
+        it "returns the number of locations with living neighbors" do
+          grid = Grid.new
+          location = Location.new(1, 1)
+
+          grid.spawn_cell_at(Location.new(0, 1))
+          grid.spawn_cell_at(Location.new(1, 2))
+
+          expect(grid.number_of_living_neighbors(location)).to eq(2)
+        end
+      end
+    end
   end
 end
