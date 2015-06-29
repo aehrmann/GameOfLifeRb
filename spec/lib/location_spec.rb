@@ -32,4 +32,21 @@ describe Location do
       expect(shifted_location).to eq(Location.new(2, 0))
     end
   end
+
+  describe "#neighboring_locations" do
+    it "returns all 8 neighboring locations" do
+      location = Location.new(0, 0)
+
+      expected_locations = [Location.new(-1, -1),
+                            Location.new(-1, 0),
+                            Location.new(-1, 1),
+                            Location.new(0, -1),
+                            Location.new(0, 1),
+                            Location.new(1, -1),
+                            Location.new(1, 0),
+                            Location.new(1, 1)]
+
+      expect(location.neighboring_locations).to match_array(expected_locations)
+    end
+  end
 end
