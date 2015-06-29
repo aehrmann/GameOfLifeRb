@@ -15,7 +15,7 @@ module GridFactory
     string_array.each.with_index do |string, row|
       string.each_char.each.with_index do |char, col|
         grid.locations[[row, col]] = char == '@' ? LivingCell.new(Location.new(row, col)) : DeadCell.new(Location.new(row, col))
-        grid.add_neighbors_of(row, col)
+        #grid.add_neighbors_of(row, col)
       end
     end
     grid

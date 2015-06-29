@@ -4,15 +4,16 @@ require 'grid_factory'
 describe GridFactory do
   describe "creating a grid" do
     it "adds locations surrounding the initial state" do
-      grid = GridFactory.from_string_array(["_@",
-                                            "@@"])
-      expected_locations = [[-1, -1], [-1, 0], [-1, 1], [-1, 2],
-                            [0, -1], [0, 0], [0, 1], [0, 2],
-                            [1, -1], [1, 0], [1, 1], [1, 2],
-                            [2, -1], [2, 0], [2, 1], [2, 2]]
-      expected_locations.each do |(row, col)|
-        expect(grid.cell_at(row, col)).not_to be_nil
-      end
+      glider = GridFactory.from_string_array(["_@_",
+                                              "__@",
+                                              "@@@"])
+
+      expected_coordinates = [[-1, -1], [-1, 0], [-1, 1], [-1, 2], [-1, 3],
+                              [0, -1], [0, 0], [0, 1], [0, 2], [0, 3],
+                              [1, -1], [1, 0], [1, 1], [1, 2], [1, 3],
+                              [2, -1], [2, 0], [2, 1], [2, 2], [2, 3],
+                              [3, -1], [3, 0], [3, 1], [3, 2], [3, 3]]
+      expect(glider.locations.keys).to match_array(expected_coordinates)
     end
 
     describe ".from_parsed_input" do
