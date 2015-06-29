@@ -4,26 +4,28 @@ Location = Struct.new(:row, :column) do
   end
 end
 
+Cell = Struct.new(:alive)
+
 class Grid
-  attr_reader :locations
+  attr_reader :cells
   def initialize
-    @locations = {}
+    @cells = {}
   end
 
   def spawn_cell_at(location)
-    locations[location] = true
+    cells[location] = Cell.new(true)
   end
 
   def kill_cell_at(location)
-    locations[location] = false
+    cells[location] = Cell.new(false)
   end
 
   def live_cell_at?(location)
-    locations[location] == true
+    cell_exists_at?(location) && cells[location].alive
   end
 
   def cell_exists_at?(location)
-    !locations[location].nil?
+    !cells[location].nil?
   end
 
   def number_of_living_neighbors(location)
