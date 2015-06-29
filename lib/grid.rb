@@ -15,4 +15,8 @@ class Grid
   def live_cell_at?(row, column)
     locations[[row, column]] == true
   end
+
+  def cell_exists_at?(row, column)
+    !locations[[row, column]].nil?
+  end
 end
