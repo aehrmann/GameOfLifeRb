@@ -13,4 +13,8 @@ class Location
   def hash
     self.row ^ self.column
   end
+
+  def shift(row_offset, column_offset)
+    Location.new(row + row_offset, column + column_offset)
+  end
 end

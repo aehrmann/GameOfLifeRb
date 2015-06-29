@@ -23,4 +23,13 @@ describe Location do
       expect(a_hash[equivalent_location]).to eq(:a_value)
     end
   end
+
+  describe "#shift" do
+    it "returns a new location shifted by offsets" do
+      location = Location.new(1, -1)
+      shifted_location = location.shift(1, 1)
+
+      expect(shifted_location).to eq(Location.new(2, 0))
+    end
+  end
 end
