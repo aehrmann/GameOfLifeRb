@@ -1,4 +1,4 @@
-require 'location'
+require_relative './location'
 
 class Cell
   NEIGHBOR_OFFSETS = [[-1, -1],[-1, 0],[-1, 1],
@@ -25,7 +25,7 @@ class Cell
 
   def number_of_living_neighbors(grid)
     all_neighbor_index_pairs(self.row, self.col).reduce(0) do |count, (row, col)|
-      cell = grid.cell_at(row, col)
+      cell = grid.locations[ [ row, col ] ]
       if !cell.nil?
         count += 1 if cell.alive?
       end
@@ -48,23 +48,30 @@ class Cell
 end
 
 class LivingCell < Cell
-  def initialize(location)
-    _initialize(location.row, location.column)
-  end
+  #def initialize(location)
+    #_initialize(location.row, location.column)
+  #end
 
-  def _initialize(row, column)
+  def initialize(row, column)
     @row, @col = row, column
     @alive = true
+  end
+  def to_s
+    "[Alive - (#{row}, #{col})]"
   end
 end
 
 class DeadCell < Cell
-  def initialize(location)
-    _initialize(location.row, location.column)
-  end
+  #def initialize(location)
+    #_initialize(location.row, location.column)
+  #end
 
-  def _initialize(row, column)
+  def initialize(row, column)
     @row, @col = row, column
     @alive = false
+  end
+
+  def to_s
+    "[Dead - (#{row}, #{col})]"
   end
 end

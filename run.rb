@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
-
-require_relative './lib/grid_factory'
-require_relative './lib/grid_formatter'
-require_relative './lib/runner'
+$:.unshift File.dirname(__FILE__)
+require 'grid_factory'
+require 'grid_formatter'
+require 'runner'
 
 p ARGV
 
