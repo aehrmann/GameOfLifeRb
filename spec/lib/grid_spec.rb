@@ -109,7 +109,7 @@ describe Grid do
 
       context "when there are no locations with living cells" do
         it "returns true immediately after creation" do
-          expect(@test_grid.empty?).to be true
+          expect(Grid.new.empty?).to be true
         end
 
         it "returns true when all existent cells are dead" do
