@@ -40,8 +40,8 @@ class Grid
   end
 
   def number_of_living_neighbors(location)
-    location.neighboring_locations.reduce(0) do |count_living, location|
-      count_living += 1 if live_cell_at?(location)
+    location.neighboring_locations.reduce(0) do |count_living, neighboring_location|
+      count_living += 1 if live_cell_at?(neighboring_location)
       count_living
     end
   end
