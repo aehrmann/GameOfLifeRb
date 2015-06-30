@@ -24,6 +24,10 @@ class Grid
     !cells[location].nil?
   end
 
+  def empty?
+    cells.values.none? { |cell| cell.alive }
+  end
+
   def number_of_living_neighbors(location)
     living_neighbors = 0
     location.neighboring_locations.each do |location|
