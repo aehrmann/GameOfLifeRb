@@ -27,4 +27,8 @@ class Location
       shift(row_offset, column_offset)
     end
   end
+
+  def to_s
+    "Location(#{row}, #{column})"
+  end
 end

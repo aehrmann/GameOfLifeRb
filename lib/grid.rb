@@ -9,12 +9,19 @@ class Grid
     if initial_state
       initial_state.each.with_index do |row, row_index|
         row.each_char.with_index do |char_value, column_index|
-          @cells[Location.new(row_index, column_index)] = Cell.new(true) if char_value == '@'
+          location = Location.new(row_index, column_index)
+          @cells[location] = Cell.new(true) if char_value == '@'
+          add_dead_cells_to_empty_neighbors(location)
         end
       end
     end
   end
 
+  def add_dead_cells_to_empty_neighbors(location)
+    location.neighboring_locations.each do |neighboring_location|
+      cells[neighboring_location] = Cell.new(false) if !cell_exists_at?(neighboring_location)
+    end
+  end
   def spawn_cell_at(location)
     cells[location] = Cell.new(true)
   end
