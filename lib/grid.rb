@@ -4,12 +4,11 @@ require 'grid_builder'
 Cell = Struct.new(:alive)
 
 class Grid
-  attr_accessor :cells
-  def initialize(initial_state = nil)
-    @cells = {}
-    if initial_state
-      @cells = GridBuilder.cells_from_initial_state(initial_state)
-    end
+
+  attr_reader :cells
+
+  def initialize(initial_state_cells = nil)
+    @cells = initial_state_cells || {}
   end
 
   def add_dead_cells_to_empty_neighbors(location)

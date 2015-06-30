@@ -2,7 +2,7 @@ require 'grid'
 
 describe Grid do
   def empty_grid
-    Grid.new
+    GridBuilder.empty_grid
   end
 
   let(:a_location) { Location.new(1, 1) }
