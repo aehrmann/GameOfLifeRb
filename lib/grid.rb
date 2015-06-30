@@ -1,19 +1,14 @@
 require 'location'
+require 'grid_builder'
 
 Cell = Struct.new(:alive)
 
 class Grid
-  attr_reader :cells
+  attr_accessor :cells
   def initialize(initial_state = nil)
     @cells = {}
     if initial_state
-      initial_state.each.with_index do |row, row_index|
-        row.each_char.with_index do |char_value, column_index|
-          location = Location.new(row_index, column_index)
-          @cells[location] = Cell.new(true) if char_value == '@'
-          add_dead_cells_to_empty_neighbors(location)
-        end
-      end
+      @cells = GridBuilder.cells_from_initial_state(initial_state)
     end
   end
 
