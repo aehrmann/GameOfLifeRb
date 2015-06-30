@@ -106,4 +106,57 @@ describe Grid do
       end
     end
   end
+
+  describe "#locations_to_update" do
+
+    context "when the cell at the location is alive" do
+      context "when the cell at the location has fewer than two living neighbors" do
+        it "should be updated" do
+          grid = GridBuilder.from_initial_state([
+            "@_@",
+            "__@"
+          ])
+          expect(grid.locations_to_update).to include(Location.new(0, 0))
+          expect(grid.locations_to_update).to include(Location.new(0, 2))
+        end
+      end
+
+      context "when the cell at the location has either two or three living neighbors" do
+        it "should not be updated" do
+          grid = GridBuilder.from_initial_state([
+            "_@_",
+            "@@_",
+            "_@@"
+          ])
+          expect(grid.locations_to_update).not_to include(Location.new(0, 1))
+          expect(grid.locations_to_update).not_to include(Location.new(2, 1))
+        end
+      end
+
+      context "when the cell at the location has more than three neighbors" do
+        it "should be updated" do
+          grid = GridBuilder.from_initial_state([
+            "@@@",
+            "_@@"
+          ])
+          expect(grid.locations_to_update).to include(Location.new(0, 1))
+        end
+      end
+    end
+
+    context "when the cell at the location is dead" do
+      context "when the cell at the location has exactly three living neighbors" do
+        it "should be updated" do
+          grid = GridBuilder.from_initial_state([
+            "@@@",
+            "_@@"
+          ])
+          expect(grid.locations_to_update).to include(Location.new(1, 0))
+        end
+      end
+    end
+  end
+
+
+
 end

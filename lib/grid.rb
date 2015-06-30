@@ -46,4 +46,20 @@ class Grid
       count_living
     end
   end
+
+  def locations_to_update
+    to_update = []
+    cells.each_pair do |location, cell|
+      if cell.alive
+        if number_of_living_neighbors(location) < 2 || number_of_living_neighbors(location) > 3
+          to_update << location
+        end
+      else
+        if number_of_living_neighbors(location) == 3
+          to_update << location
+        end
+      end
+    end
+    to_update
+  end
 end
