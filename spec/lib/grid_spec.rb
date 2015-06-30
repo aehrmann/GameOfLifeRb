@@ -85,29 +85,28 @@ describe Grid do
 
     describe "#number_of_living_neighbors" do
 
-      context "when the location has no living neighbors" do
+      context "when the location has no neighboring locations with living cells" do
         it "returns 0" do
           grid = Grid.new
           expect(grid.number_of_living_neighbors(test_location)).to eq(0)
         end
       end
 
-      context "when neighboring locations have living cells" do
+      context "when at least one of the neighboring locations has a living cell" do
         it "returns the number of locations with living neighbors" do
           grid = Grid.new
           location = Location.new(1, 1)
 
-          grid.spawn_cell_at(Location.new(0, 1))
           grid.spawn_cell_at(Location.new(1, 2))
 
-          expect(grid.number_of_living_neighbors(location)).to eq(2)
+          expect(grid.number_of_living_neighbors(location)).to eq(1)
         end
       end
     end
 
     describe "#empty?" do
 
-      context "when there are no locations with living cells" do
+      context "when there are no living cells" do
         it "returns true immediately after creation" do
           expect(Grid.new.empty?).to be true
         end
@@ -119,7 +118,7 @@ describe Grid do
         end
       end
 
-      context "when there is at least one location with a living cell" do
+      context "when there is at least one living cell" do
         it "returns false" do
           @test_grid.spawn_cell_at(test_location)
           expect(@test_grid.empty?).to be false
