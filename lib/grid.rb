@@ -29,10 +29,9 @@ class Grid
   end
 
   def number_of_living_neighbors(location)
-    living_neighbors = 0
-    location.neighboring_locations.each do |location|
-      living_neighbors += 1 if live_cell_at?(location)
+    location.neighboring_locations.reduce(0) do |count_living, location|
+      count_living += 1 if live_cell_at?(location)
+      count_living
     end
-    living_neighbors
   end
 end
