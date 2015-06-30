@@ -2,42 +2,6 @@ require 'grid'
 
 describe Grid do
 
-  describe "creating a new grid" do
-    before(:each) do
-      @grid = Grid.new([
-        "_@",
-        "@@"
-      ])
-    end
-
-    context "when passed an initial state configuration" do
-      it "stores all of the live cells specified in the initial state" do
-        expect(@grid.number_of_living_cells).to eq(3)
-      end
-
-      it "adds a border of dead cells around the given grid" do
-        padded_locations = [
-          Location.new(-1, -1),
-          Location.new(-1, 0),
-          Location.new(-1, 1),
-          Location.new(-1, 2),
-          Location.new(0, -1),
-          Location.new(0, 2),
-          Location.new(1, -1),
-          Location.new(1, 2),
-          Location.new(2, -1),
-          Location.new(2, 0),
-          Location.new(2, 1),
-          Location.new(2, 2)
-        ]
-
-        padded_locations.each do |location|
-          expect(@grid.cell_exists_at?(location)).to be true
-        end
-      end
-    end
-  end
-
   describe "#spawn_cell_at" do
     before(:each) do
       @new_grid = Grid.new
@@ -105,49 +69,52 @@ describe Grid do
         end
       end
     end
+  end
 
-    describe "#number_of_living_neighbors" do
+  describe "#number_of_living_neighbors" do
+    let(:test_location) { Location.new(0, 0) }
 
-      context "when the location has no neighboring locations with living cells" do
-        it "returns 0" do
-          grid = Grid.new
-          expect(grid.number_of_living_neighbors(test_location)).to eq(0)
-        end
-      end
-
-      context "when at least one of the neighboring locations has a living cell" do
-        it "returns the number of locations with living neighbors" do
-          grid = Grid.new
-          location = Location.new(1, 1)
-
-          grid.spawn_cell_at(Location.new(1, 2))
-
-          expect(grid.number_of_living_neighbors(location)).to eq(1)
-        end
+    context "when the location has no neighboring locations with living cells" do
+      it "returns 0" do
+        grid = Grid.new
+        expect(grid.number_of_living_neighbors(test_location)).to eq(0)
       end
     end
 
-    describe "#empty?" do
+    context "when at least one of the neighboring locations has a living cell" do
+      it "returns the number of locations with living neighbors" do
+        grid = Grid.new
+        location = Location.new(1, 1)
+        grid.spawn_cell_at(Location.new(1, 2))
 
-      context "when there are no living cells" do
-        it "returns true immediately after creation" do
-          expect(Grid.new.empty?).to be true
-        end
+        expect(grid.number_of_living_neighbors(location)).to eq(1)
+      end
+    end
+  end
 
-        it "returns true when all existent cells are dead" do
-          @new_grid.spawn_cell_at(@test_location)
-          @new_grid.kill_cell_at(@test_location)
-          expect(@new_grid.empty?).to be true
-        end
+  describe "#empty?" do
+    let(:test_location) { Location.new(1, 1) }
+    before(:each) do
+      @new_grid = Grid.new
+    end
+
+    context "when there are no living cells" do
+      it "returns true immediately after creation" do
+        expect(Grid.new.empty?).to be true
       end
 
-      context "when there is at least one living cell" do
-        it "returns false" do
-          @new_grid.spawn_cell_at(test_location)
-          expect(@new_grid.empty?).to be false
-        end
+      it "returns true when all existent cells are dead" do
+        @new_grid.spawn_cell_at(test_location)
+        @new_grid.kill_cell_at(test_location)
+        expect(@new_grid.empty?).to be true
       end
+    end
 
+    context "when there is at least one living cell" do
+      it "returns false" do
+        @new_grid.spawn_cell_at(test_location)
+        expect(@new_grid.empty?).to be false
+      end
     end
   end
 end
