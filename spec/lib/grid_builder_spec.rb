@@ -3,13 +3,15 @@ require 'grid_builder'
 describe GridBuilder do
   describe "creating a new grid" do
     before(:each) do
-      @grid = Grid.new
-      @grid.cells = GridBuilder.cells_from_initial_state(["_@", "@@"])
+      @test_grid = GridBuilder.from_initial_state([
+        "_@",
+        "@@"
+      ])
     end
 
     context "when passed an initial state configuration" do
       it "stores all of the live cells specified in the initial state" do
-        expect(@grid.number_of_living_cells).to eq(3)
+        expect(@test_grid.number_of_living_cells).to eq(3)
       end
 
       it "adds a border of dead cells around the given grid" do
@@ -29,7 +31,7 @@ describe GridBuilder do
         ]
 
         padded_locations.each do |location|
-          expect(@grid.cell_exists_at?(location)).to be true
+          expect(@test_grid.cell_exists_at?(location)).to be true
         end
       end
     end
