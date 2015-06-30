@@ -4,8 +4,15 @@ Cell = Struct.new(:alive)
 
 class Grid
   attr_reader :cells
-  def initialize
+  def initialize(initial_state = nil)
     @cells = {}
+    if initial_state
+      initial_state.each.with_index do |row, row_index|
+        row.each_char.with_index do |char_value, column_index|
+          @cells[Location.new(row_index, column_index)] = Cell.new(true) if char_value == '@'
+        end
+      end
+    end
   end
 
   def spawn_cell_at(location)
@@ -25,7 +32,11 @@ class Grid
   end
 
   def empty?
-    cells.values.none? { |cell| cell.alive }
+    number_of_living_cells == 0
+  end
+
+  def number_of_living_cells
+    cells.values.count { |cell| cell.alive }
   end
 
   def number_of_living_neighbors(location)

@@ -2,6 +2,19 @@ require 'grid'
 
 describe Grid do
 
+  describe "creating a new grid" do
+
+    context "when passed an initial state configuration" do
+      it "stores all of the live cells specified in the initial state" do
+        grid = Grid.new(
+          ["_@",
+           "@@"]
+        )
+        expect(grid.number_of_living_cells).to eq(3)
+      end
+    end
+  end
+
   describe "#spawn_cell_at" do
     before(:each) do
       @test_grid = Grid.new
