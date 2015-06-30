@@ -23,7 +23,7 @@ class Runner
   end
 
   def step
-    if grid.all_cells_dead?
+    if grid.empty?
       stop
     end
     out_stream.puts GridFormatter.new(grid).as_string
