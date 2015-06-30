@@ -48,18 +48,32 @@ class Grid
   end
 
   def locations_to_update
-    to_update = []
+    locations_to_update = []
     cells.each_pair do |location, cell|
       if cell.alive
-        if number_of_living_neighbors(location) < 2 || number_of_living_neighbors(location) > 3
-          to_update << location
+        if underpopulated?(location) || overpopulated?(location)
+          locations_to_update << location
         end
       else
-        if number_of_living_neighbors(location) == 3
-          to_update << location
+        if stable_population?(location)
+          locations_to_update << location
         end
       end
     end
-    to_update
+    locations_to_update
+  end
+
+  private
+
+  def underpopulated?(location)
+    number_of_living_neighbors(location) < 2
+  end
+
+  def overpopulated?(location)
+    number_of_living_neighbors(location) > 3
+  end
+
+  def stable_population?(location)
+    number_of_living_neighbors(location) == 3
   end
 end
