@@ -9,7 +9,7 @@ module GridBuilder
 
     self.with_location_character_pairs(initial_state) do |location, character|
       grid.add_live_cell_at(location) if character == LIVING_CELL_CHARACTER
-      self.add_nonexistent_neighboring_locations(grid, location)
+      grid.add_nonexistent_neighboring_locations(location)
     end
 
     grid

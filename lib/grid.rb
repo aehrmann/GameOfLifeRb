@@ -29,13 +29,18 @@ class Grid
     self.locations_to_update.each do |location|
       if self.live_cell_at?(location)
         next_grid.add_dead_cell_at(location)
-        GridBuilder.add_nonexistent_neighboring_locations(self, location)
       else
         next_grid.add_live_cell_at(location)
-        GridBuilder.add_nonexistent_neighboring_locations(self, location)
       end
+      add_nonexistent_neighboring_locations(location)
     end
     next_grid
+  end
+
+  def add_nonexistent_neighboring_locations(location)
+    location.neighboring_locations.each do |neighboring_location|
+      add_dead_cell_at(neighboring_location) if !cell_exists_at?(neighboring_location)
+    end
   end
 
   class << self
