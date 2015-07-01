@@ -8,19 +8,10 @@ class Grid
   attr_reader :cells
 
   def locations_to_update
-    locations_to_update = []
-    cells.each_pair do |location, cell|
-      if cell.alive
-        if underpopulated?(location) || overpopulated?(location)
-          locations_to_update << location
-        end
-      else
-        if stable_population?(location)
-          locations_to_update << location
-        end
-      end
+    cells.keys.reduce([]) do |locations_to_update, location|
+      locations_to_update << location if should_change_status?(location)
+      locations_to_update
     end
-    locations_to_update
   end
 
   def tick
@@ -31,6 +22,19 @@ class Grid
     end
 
     next_grid
+  end
+
+  def should_change_status?(location)
+    if live_cell_at?(location)
+      if underpopulated?(location) || overpopulated?(location)
+        true
+      end
+    else
+      if stable_population?(location)
+        true
+      end
+    end
+
   end
 
   def update_cell_at_location(location)
