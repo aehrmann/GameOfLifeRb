@@ -3,10 +3,6 @@ require 'grid_builder'
 describe GridBuilder do
   describe "creating a new grid" do
     before(:each) do
-      #@test_grid = GridBuilder.from_initial_state([
-        #"_@",
-        #"@@"
-      #])
       @test_grid = GridBuilder.from_initial_state([
         "_@_",
         "__@",
