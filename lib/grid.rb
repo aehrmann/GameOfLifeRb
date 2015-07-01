@@ -1,17 +1,17 @@
 require 'location'
 require 'grid_builder'
+require 'cell_rules'
 
-Cell = Struct.new(:alive)
 
 class Grid
 
-  attr_reader :cells
+  Cell = Struct.new(:alive)
 
-  def locations_to_update
-    cells.keys.reduce([]) do |locations_to_update, location|
-      locations_to_update << location if should_change_status?(location)
-      locations_to_update
-    end
+  attr_reader :cells, :rules
+
+  def initialize(cells = nil)
+    @cells = cells || {}
+    @rules = CellRules.new(self)
   end
 
   def tick
@@ -24,24 +24,14 @@ class Grid
     next_grid
   end
 
-  def should_change_status?(location)
-    if live_cell_at?(location)
-      if underpopulated?(location) || overpopulated?(location)
-        true
-      end
-    else
-      if stable_population?(location)
-        true
-      end
-    end
-
+  def copy
+    Grid.new(self.cells.dup)
   end
 
-  def update_cell_at_location(location)
-    if live_cell_at?(location)
-      add_dead_cell_at(location)
-    else
-      add_live_cell_at(location)
+  def locations_to_update
+    cells.keys.reduce([]) do |locations_to_update, location|
+      locations_to_update << location if rules.should_change_status?(location)
+      locations_to_update
     end
   end
 
@@ -51,16 +41,12 @@ class Grid
     end
   end
 
-  class << self
-    private :initialize
-  end
-
-  def initialize(cells = nil)
-    @cells = cells || {}
-  end
-
-  def copy
-    Grid.new(self.cells.dup)
+  def update_cell_at_location(location)
+    if live_cell_at?(location)
+      add_dead_cell_at(location)
+    else
+      add_live_cell_at(location)
+    end
   end
 
   def add_live_cell_at(location)
@@ -92,20 +78,5 @@ class Grid
       count_living += 1 if live_cell_at?(neighboring_location)
       count_living
     end
-  end
-
-
-  private
-
-  def underpopulated?(location)
-    number_of_living_neighbors(location) < 2
-  end
-
-  def overpopulated?(location)
-    number_of_living_neighbors(location) > 3
-  end
-
-  def stable_population?(location)
-    number_of_living_neighbors(location) == 3
   end
 end
