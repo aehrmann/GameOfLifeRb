@@ -7,8 +7,12 @@ class Grid
 
   attr_reader :cells
 
-  def initialize(initial_state_cells = nil)
-    @cells = initial_state_cells || {}
+  class << self
+    private :initialize
+  end
+
+  def initialize
+    @cells = {}
   end
 
   def add_dead_cells_to_empty_neighbors(location)
@@ -16,11 +20,12 @@ class Grid
       cells[neighboring_location] = Cell.new(false) if !cell_exists_at?(neighboring_location)
     end
   end
-  def spawn_cell_at(location)
+
+  def add_live_cell_at(location)
     cells[location] = Cell.new(true)
   end
 
-  def kill_cell_at(location)
+  def add_dead_cell_at(location)
     cells[location] = Cell.new(false)
   end
 

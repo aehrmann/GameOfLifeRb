@@ -5,25 +5,20 @@ module GridBuilder
   LIVING_CELL_CHARACTER = '@'
 
   def self.from_initial_state(initial_state)
-    cells = {}
+    grid = Grid.new
     initial_state.each.with_index do |row, row_index|
-      row.each_char.with_index do |char_value, column_index|
-        self.add_cell_and_any_neighbors(row_index, column_index, char_value, cells)
+      row.each_char.with_index do |cell_character, column_index|
+        location = Location.new(row_index, column_index)
+        grid.add_live_cell_at(location) if cell_character == LIVING_CELL_CHARACTER
+        location.neighboring_locations.each do |neighboring_location|
+          grid.add_dead_cell_at(neighboring_location) if !grid.cell_exists_at?(neighboring_location)
+        end
       end
     end
-    Grid.new(cells)
+    grid
   end
 
   def self.empty_grid
     Grid.new
   end
-
-  def self.add_cell_and_any_neighbors(row, column, character, cells)
-    location = Location.new(row, column)
-    cells[location] = Cell.new(true) if character == LIVING_CELL_CHARACTER
-    location.neighboring_locations.each do |neighboring_location|
-      cells[neighboring_location] = Cell.new(false) if cells[neighboring_location].nil?
-    end
-  end
-  
 end
