@@ -15,12 +15,6 @@ class Grid
     @cells = {}
   end
 
-  def add_dead_cells_to_empty_neighbors(location)
-    location.neighboring_locations.each do |neighboring_location|
-      cells[neighboring_location] = Cell.new(false) if !cell_exists_at?(neighboring_location)
-    end
-  end
-
   def add_live_cell_at(location)
     cells[location] = Cell.new(true)
   end
