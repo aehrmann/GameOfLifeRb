@@ -7,12 +7,43 @@ class Grid
 
   attr_reader :cells
 
+  def locations_to_update
+    locations_to_update = []
+    cells.each_pair do |location, cell|
+      if cell.alive
+        if underpopulated?(location) || overpopulated?(location)
+          locations_to_update << location
+        end
+      else
+        if stable_population?(location)
+          locations_to_update << location
+        end
+      end
+    end
+    locations_to_update
+  end
+
+  def tick
+    next_grid = Grid.new(self.cells.dup)
+    
+    self.locations_to_update.each do |location|
+      if self.live_cell_at?(location)
+        next_grid.add_dead_cell_at(location)
+        GridBuilder.add_nonexistent_neighboring_locations(self, location)
+      else
+        next_grid.add_live_cell_at(location)
+        GridBuilder.add_nonexistent_neighboring_locations(self, location)
+      end
+    end
+    next_grid
+  end
+
   class << self
     private :initialize
   end
 
-  def initialize
-    @cells = {}
+  def initialize(cells = nil)
+    @cells = cells || {}
   end
 
   def add_live_cell_at(location)
@@ -46,21 +77,6 @@ class Grid
     end
   end
 
-  def locations_to_update
-    locations_to_update = []
-    cells.each_pair do |location, cell|
-      if cell.alive
-        if underpopulated?(location) || overpopulated?(location)
-          locations_to_update << location
-        end
-      else
-        if stable_population?(location)
-          locations_to_update << location
-        end
-      end
-    end
-    locations_to_update
-  end
 
   private
 

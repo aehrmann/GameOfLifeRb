@@ -28,6 +28,7 @@ module GridBuilder
       end
     end
   end
+
   def self.add_nonexistent_neighboring_locations(grid, location)
     location.neighboring_locations.each do |neighboring_location|
       grid.add_dead_cell_at(neighboring_location) if !grid.cell_exists_at?(neighboring_location)

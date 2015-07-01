@@ -108,51 +108,65 @@ describe Grid do
   end
 
   describe "#locations_to_update" do
-
+    let(:test_grid) do
+      GridBuilder.from_initial_state([
+        "@_@__",
+        "__@__",
+        "_@@@@",
+        "@__@@"
+      ])
+    end
     context "when the cell at the location is alive" do
-      context "when the cell at the location has fewer than two living neighbors" do
+      context "and the cell at the location has fewer than two living neighbors" do
         it "should be updated" do
-          grid = GridBuilder.from_initial_state([
-            "@_@",
-            "__@"
-          ])
-          expect(grid.locations_to_update).to include(Location.new(0, 0))
-          expect(grid.locations_to_update).to include(Location.new(0, 2))
+          expect(test_grid.locations_to_update).to include(Location.new(0, 0))
+          expect(test_grid.locations_to_update).to include(Location.new(0, 2))
         end
       end
 
-      context "when the cell at the location has either two or three living neighbors" do
+      context "and the cell at the location has either two or three living neighbors" do
         it "should not be updated" do
-          grid = GridBuilder.from_initial_state([
-            "_@_",
-            "@@_",
-            "_@@"
-          ])
-          expect(grid.locations_to_update).not_to include(Location.new(0, 1))
-          expect(grid.locations_to_update).not_to include(Location.new(2, 1))
+          expect(test_grid.locations_to_update).not_to include(Location.new(0, 3))
+          expect(test_grid.locations_to_update).not_to include(Location.new(3, 5))
         end
       end
 
-      context "when the cell at the location has more than three neighbors" do
+      context "and the cell at the location has more than three neighbors" do
         it "should be updated" do
-          grid = GridBuilder.from_initial_state([
-            "@@@",
-            "_@@"
-          ])
-          expect(grid.locations_to_update).to include(Location.new(0, 1))
+          expect(test_grid.locations_to_update).to include(Location.new(3, 3))
         end
       end
     end
 
     context "when the cell at the location is dead" do
-      context "when the cell at the location has exactly three living neighbors" do
+      context "and the cell at the location has exactly three living neighbors" do
         it "should be updated" do
-          grid = GridBuilder.from_initial_state([
-            "@@@",
-            "_@@"
-          ])
-          expect(grid.locations_to_update).to include(Location.new(1, 0))
+          expect(test_grid.locations_to_update).to include(Location.new(3, 1))
         end
+      end
+    end
+  end
+  
+  describe "#tick" do
+    it "should update the cells at the relevant locations" do
+      glider_grid = GridBuilder.from_initial_state([
+        "_@_",
+        "__@",
+        "@@@"
+      ])
+
+      next_grid = glider_grid.tick
+
+      expected_living_locations = [
+        Location.new(1, 0),
+        Location.new(1, 2),
+        Location.new(2, 1),
+        Location.new(2, 2),
+        Location.new(3, 1)
+      ]
+
+      expected_living_locations.each do |location|
+        expect(next_grid.live_cell_at?(location)).to be true
       end
     end
   end
