@@ -24,17 +24,21 @@ class Grid
   end
 
   def tick
-    next_grid = Grid.new(self.cells.dup)
+    next_grid = self.copy
     
-    self.locations_to_update.each do |location|
-      if self.live_cell_at?(location)
-        next_grid.add_dead_cell_at(location)
-      else
-        next_grid.add_live_cell_at(location)
-      end
-      add_nonexistent_neighboring_locations(location)
+    locations_to_update.each do |location|
+      next_grid.update_cell_at_location(location)
     end
+
     next_grid
+  end
+
+  def update_cell_at_location(location)
+    if live_cell_at?(location)
+      add_dead_cell_at(location)
+    else
+      add_live_cell_at(location)
+    end
   end
 
   def add_nonexistent_neighboring_locations(location)
@@ -49,6 +53,10 @@ class Grid
 
   def initialize(cells = nil)
     @cells = cells || {}
+  end
+
+  def copy
+    Grid.new(self.cells.dup)
   end
 
   def add_live_cell_at(location)
