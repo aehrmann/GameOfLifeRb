@@ -1,6 +1,6 @@
 class Game
 
-  attr_reader :grid
+  attr_accessor :grid
 
   def initialize(state_file_name)
     @grid = load_grid_from_file(state_file_name)
@@ -8,6 +8,7 @@ class Game
 
   def iterate_once
     puts GridFormatter.as_string(self.grid)
+    self.grid = self.grid.tick
   end
 
   private

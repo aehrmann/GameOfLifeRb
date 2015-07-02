@@ -3,6 +3,13 @@ require 'grid_builder'
 require 'grid_formatter'
 require 'stringio'
 
+def with_fake_output
+  fake_output = StringIO.new
+  $stdout = fake_output
+  yield fake_output
+  $stdout = STDOUT
+end
+
 describe Game do
 
   before(:each) do
@@ -26,13 +33,19 @@ describe Game do
       it "outputs the current grid" do
         expected_string = GridFormatter.as_string(@game.grid)
 
-        fake_output = StringIO.new
-        $stdout = fake_output
+        with_fake_output do |output|
+          @game.iterate_once
 
-        @game.iterate_once
+          expect(output.string).to match(expected_string)
+        end
+      end
 
-        expect(fake_output.string).to match(expected_string)
-        $stdout = STDOUT
+      it "generates a new grid" do
+        expected_grid = @game.grid.tick
+        with_fake_output do
+          @game.iterate_once
+          expect(@game.grid).to eq(expected_grid)
+        end
       end
     end
   end
