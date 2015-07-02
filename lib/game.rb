@@ -16,8 +16,9 @@ class Game
   end
 
   def iterate_once
-    sleep 0.3
+    sleep 0.1
     clear_and_display_grid
+    sleep 0.1
     self.grid = self.grid.tick
   end
 
@@ -29,6 +30,7 @@ class Game
   end
 
   def clear_and_display_grid
-    puts (' ' * @screen_columns) * @screen_rows + "\n" + GridFormatter.as_string(self.grid)
+    puts (' ' * @screen_columns) * (@screen_rows - 4)
+    puts GridFormatter.as_string(self.grid)
   end
 end
