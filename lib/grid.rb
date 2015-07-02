@@ -79,4 +79,8 @@ class Grid
       count_living
     end
   end
+
+  def ==(other)
+    self.cells == other.cells
+  end
 end

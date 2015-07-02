@@ -170,4 +170,19 @@ describe Grid do
       end
     end
   end
+
+  describe "#==" do
+    it "return true if the grid has the same locations and cells" do
+      intitial_state = ["@_"]
+      grid = GridBuilder.from_initial_state(intitial_state)
+      equivalent_grid = GridBuilder.from_initial_state(intitial_state)
+      expect(grid).to eq(equivalent_grid)
+    end
+
+    it "return false otherwise" do
+      grid = GridBuilder.from_initial_state(["@"])
+      different_grid = GridBuilder.from_initial_state(["_"])
+      expect(grid).not_to eq(different_grid)
+    end
+  end
 end
