@@ -12,6 +12,9 @@ module GridBuilder
       grid.add_nonexistent_neighboring_locations(location)
     end
 
+    grid.width = initial_state[0].length
+    grid.height = initial_state.length
+
     grid
   end
 

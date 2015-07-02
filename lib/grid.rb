@@ -8,6 +8,7 @@ class Grid
   Cell = Struct.new(:alive)
 
   attr_reader :cells, :rules
+  attr_accessor :width, :height
 
   def initialize(cells = nil)
     @cells = cells || {}

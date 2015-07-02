@@ -11,6 +11,14 @@ describe Grid do
     @fresh_grid = empty_grid
   end
 
+  describe "the attributes of a grid" do
+    it "stores the width and height of the original state" do
+      grid = GridBuilder.from_initial_state(["__", "__", "__"])
+      expect(grid.width).to eq(2)
+      expect(grid.height).to eq(3)
+    end
+  end
+
   describe "#add_live_cell_at" do
     it "creates a living cell at a given location" do
       @fresh_grid.add_live_cell_at(a_location)

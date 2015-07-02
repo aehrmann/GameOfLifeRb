@@ -40,5 +40,10 @@ describe GridBuilder do
         end
       end
     end
+
+    it "stores the original width and height in the grid" do
+      expect(@test_grid.width).to eq(3)
+      expect(@test_grid.height).to eq(3)
+    end
   end
 end
