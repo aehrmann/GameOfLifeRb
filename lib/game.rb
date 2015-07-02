@@ -9,9 +9,15 @@ class Game
     @screen_rows, @screen_columns = IO.console.winsize
   end
 
+  def run_loop
+    until self.grid.empty?
+      iterate_once
+    end
+  end
+
   def iterate_once
-    clear_screen
-    puts GridFormatter.as_string(self.grid)
+    sleep 0.3
+    clear_and_display_grid
     self.grid = self.grid.tick
   end
 
@@ -22,7 +28,7 @@ class Game
     GridBuilder.from_initial_state(initial_state)
   end
 
-  def clear_screen
-    puts (' ' * @screen_columns) * @screen_rows + "\n"
+  def clear_and_display_grid
+    puts (' ' * @screen_columns) * @screen_rows + "\n" + GridFormatter.as_string(self.grid)
   end
 end

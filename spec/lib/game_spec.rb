@@ -66,7 +66,17 @@ describe Game do
     end
 
     describe "running the main loop" do
+      it "runs until the grid is empty" do
+        fake_file = StringIO.new("@\n@\n")
+        allow(File).to receive(:open).with("test_state.txt").and_return(fake_file)
 
+        game = Game.new("test_state.txt")
+
+        with_fake_output do
+          game.run_loop
+          expect(game.grid.empty?).to be true
+        end
+      end
     end
   end
 end
