@@ -2,7 +2,6 @@ require 'location'
 require 'grid_builder'
 require 'cell_rules'
 
-
 class Grid
 
   Cell = Struct.new(:alive)
@@ -22,11 +21,16 @@ class Grid
       next_grid.update_cell_at_location(location)
     end
 
+    next_grid.remove_irrelevant_locations
+
     next_grid
   end
 
   def copy
-    Grid.new(self.cells.dup)
+    grid = Grid.new(self.cells.dup)
+    grid.width = self.width
+    grid.height = self.height
+    grid
   end
 
   def locations_to_update
@@ -42,12 +46,21 @@ class Grid
     end
   end
 
+  def remove_irrelevant_locations
+    cells.each_key do |location|
+      if number_of_living_neighbors(location) == 0
+        cells.delete(location)
+      end
+    end
+  end
+
   def update_cell_at_location(location)
     if live_cell_at?(location)
       add_dead_cell_at(location)
     else
       add_live_cell_at(location)
     end
+    add_nonexistent_neighboring_locations(location)
   end
 
   def add_live_cell_at(location)

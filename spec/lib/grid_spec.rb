@@ -1,4 +1,6 @@
 require 'grid'
+require 'cell_rules'
+require 'grid_formatter'
 
 describe Grid do
   def empty_grid
@@ -12,10 +14,16 @@ describe Grid do
   end
 
   describe "the attributes of a grid" do
+    let(:two_by_three_grid) { GridBuilder.from_initial_state(["__",
+                                                              "__",
+                                                              "__"]) }
     it "stores the width and height of the original state" do
-      grid = GridBuilder.from_initial_state(["__", "__", "__"])
-      expect(grid.width).to eq(2)
-      expect(grid.height).to eq(3)
+      expect(two_by_three_grid.width).to eq(2)
+      expect(two_by_three_grid.height).to eq(3)
+    end
+
+    it "contains cell rules" do
+      expect(two_by_three_grid.rules).not_to be_nil
     end
   end
 
@@ -141,6 +149,7 @@ describe Grid do
 
       context "and the cell at the location has more than three neighbors" do
         it "should be updated" do
+          expect(test_grid.locations_to_update).to include(Location.new(2, 2))
           expect(test_grid.locations_to_update).to include(Location.new(3, 3))
         end
       end
@@ -152,6 +161,22 @@ describe Grid do
           expect(test_grid.locations_to_update).to include(Location.new(3, 1))
         end
       end
+    end
+
+    fit "selects the correct cells to update" do
+      grid = GridBuilder.from_initial_state(["_@_",
+                                             "__@",
+                                             "@@@"])
+
+      expected_locations = [
+        Location.new(0, 1),
+        Location.new(1, 0),
+        Location.new(2, 0),
+        Location.new(3, 1)
+      ]
+
+      expect(grid.locations_to_update).to match_array(expected_locations)
+    
     end
   end
   
@@ -175,6 +200,56 @@ describe Grid do
 
       expected_living_locations.each do |location|
         expect(next_grid.live_cell_at?(location)).to be true
+      end
+    end
+
+    it "should generate the next generation for a grid" do
+      
+      grid = GridBuilder.from_initial_state(["_@_",
+                                             "__@",
+                                             "@@@"])
+      next_grid = grid.tick
+
+      expected_living_locations = [
+        Location.new(1, 0),
+        Location.new(1, 2),
+        Location.new(2, 1),
+        Location.new(2, 2),
+        Location.new(3, 1)
+      ]
+
+      expected_living_locations.each do |location|
+        expect(next_grid.live_cell_at?(location)).to be true
+      end
+    end
+
+    it "removes the irrelevant cells from the grid" do
+      grid = GridBuilder.from_initial_state([
+        "__",
+        "@@"
+      ])
+      next_grid = grid.tick
+
+      expect(next_grid.cells.empty?).to be true
+    end
+  end
+
+  describe "#add_nonexistent_neighboring_locations" do
+    it "adds dead cells to vacant neighbors of a location" do
+      grid = GridBuilder.from_initial_state([
+        "@_@",
+        "_@@",
+        "@@@"
+      ])
+
+      grid.add_nonexistent_neighboring_locations(Location.new(1, 1))
+      expected_added_locations = [
+        Location.new(0, 1),
+        Location.new(1, 0)
+      ]
+
+      expected_added_locations.each do |location|
+        expect(grid.cell_exists_at?(location)).to be true
       end
     end
   end
