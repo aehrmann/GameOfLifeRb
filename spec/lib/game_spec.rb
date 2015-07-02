@@ -52,7 +52,7 @@ describe Game do
 
         with_fake_output do |output|
           @game.iterate_once
-          expect(output.string).to eq(expected_string)
+          expect(output.string).to match(expected_string)
         end
       end
 
@@ -70,11 +70,11 @@ describe Game do
         fake_file = StringIO.new("@\n@\n")
         allow(File).to receive(:open).with("test_state.txt").and_return(fake_file)
 
-        game = Game.new("test_state.txt")
+        @game = Game.new("test_state.txt")
 
         with_fake_output do
-          game.run_loop
-          expect(game.grid.empty?).to be true
+          @game.run_loop
+          expect(@game.grid.empty?).to be true
         end
       end
     end
