@@ -2,6 +2,7 @@ require 'game'
 require 'grid_builder'
 require 'grid_formatter'
 require 'stringio'
+require 'io/console'
 
 def with_fake_output
   fake_output = StringIO.new
@@ -28,6 +29,10 @@ describe Game do
   end
 
   describe "the main loop" do
+    let(:clear_string) do
+      rows, cols = IO.console.winsize
+      (' ' * cols) * rows + "\n"
+    end
 
     describe "one iteration" do
       it "outputs the current grid" do
@@ -40,6 +45,17 @@ describe Game do
         end
       end
 
+      it "clears the screen during each iteration" do
+        grid_string = GridFormatter.as_string(@game.grid)
+
+        expected_string = clear_string + grid_string
+
+        with_fake_output do |output|
+          @game.iterate_once
+          expect(output.string).to eq(expected_string)
+        end
+      end
+
       it "generates a new grid" do
         expected_grid = @game.grid.tick
         with_fake_output do
@@ -47,6 +63,10 @@ describe Game do
           expect(@game.grid).to eq(expected_grid)
         end
       end
+    end
+
+    describe "running the main loop" do
+
     end
   end
 end
