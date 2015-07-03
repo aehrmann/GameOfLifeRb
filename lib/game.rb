@@ -18,7 +18,6 @@ class Game
   def iterate_once
     sleep 0.1
     clear_and_display_grid
-    sleep 0.1
     self.grid = self.grid.tick
   end
 
@@ -30,7 +29,10 @@ class Game
   end
 
   def clear_and_display_grid
-    puts (' ' * @screen_columns) * (@screen_rows - 4)
-    puts GridFormatter.as_string(self.grid)
+    display_string = ""
+    display_string << (((' ') * (@screen_columns)) * @screen_rows) + ""
+    display_string << ("\n" + GridFormatter.as_string(self.grid))
+    display_string << "\e[1;1H"
+    $stdout.write display_string
   end
 end
