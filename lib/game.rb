@@ -1,4 +1,4 @@
-require 'io/console'
+require 'terminal_display'
 
 class Game
 
@@ -6,7 +6,7 @@ class Game
 
   def initialize(state_file_name)
     @grid = load_grid_from_file(state_file_name)
-    @screen_rows, @screen_columns = IO.console.winsize
+    @display = TerminalDisplay.new
   end
 
   def run_loop
@@ -29,10 +29,6 @@ class Game
   end
 
   def clear_and_display_grid
-    display_string = ""
-    display_string << (((' ') * (@screen_columns)) * @screen_rows) + ""
-    display_string << ("\n" + GridFormatter.as_string(self.grid))
-    display_string << "\e[1;1H"
-    $stdout.write display_string
+    @display.clear_and_display_grid(grid)
   end
 end
