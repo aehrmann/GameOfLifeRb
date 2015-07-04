@@ -2,11 +2,11 @@ require 'terminal_display'
 
 class Game
 
-  attr_accessor :grid
+  attr_accessor :grid, :display
 
-  def initialize(state_file_name)
+  def initialize(state_file_name, terminal_display = nil)
     @grid = load_grid_from_file(state_file_name)
-    @display = TerminalDisplay.new
+    @display = terminal_display || TerminalDisplay.new
   end
 
   def run_loop
@@ -16,8 +16,9 @@ class Game
   end
 
   def iterate_once
-    sleep 0.1
-    clear_and_display_grid
+    display.pause
+    display.clear_screen
+    display.display_grid(self.grid)
     self.grid = self.grid.next_generation
   end
 

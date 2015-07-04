@@ -1,23 +1,17 @@
 require 'game'
 require 'grid_builder'
-require 'grid_formatter'
-require 'stringio'
-require 'io/console'
+require_relative './mocks/mock_terminal_display'
 
-def with_fake_output
-  fake_output = StringIO.new
-  $stdout = fake_output
-  yield fake_output
-  $stdout = STDOUT
+def fake_file_read(filename, contents)
+  allow(File).to receive(:open).with(filename).and_return(StringIO.new(contents))
 end
 
 describe Game do
 
   before(:each) do
-    fake_file = StringIO.new("___\n@@@\n")
-    allow(File).to receive(:open).with("test_state.txt").and_return(fake_file)
-
-    @game = Game.new("test_state.txt")
+    fake_file_read("test_state.txt", "___\n@@@\n")
+    mock_terminal = MockTerminalDisplay.new
+    @game = Game.new("test_state.txt", mock_terminal)
   end
 
   describe "loading a file" do
@@ -29,55 +23,42 @@ describe Game do
   end
 
   describe "the main loop" do
-    let(:clear_string) do
-      rows, cols = IO.console.winsize
-      (' ' * cols) * rows + "\n"
-    end
 
     describe "one iteration" do
+
+      before(:each) do
+        @game.iterate_once
+      end
+
       it "outputs the current grid" do
-        expected_string = GridFormatter.as_string(@game.grid)
-
-        with_fake_output do |output|
-          @game.iterate_once
-
-          expect(output.string).to match(expected_string)
-        end
+        expect(@game.display.display_grid_was_called).to be true
       end
 
       it "clears the screen during each iteration" do
-        grid_string = GridFormatter.as_string(@game.grid)
-
-        expected_string = clear_string + grid_string
-
-        with_fake_output do |output|
-          @game.iterate_once
-          expect(output.string).to match(expected_string)
-        end
+        expect(@game.display.clear_screen_was_called).to be true
       end
 
+      it "pauses during the iteration" do
+        expect(@game.display.pause_was_called).to be true
+      end
+    end
+
+    describe "updating the grid" do
       it "generates a new grid" do
         expected_grid = @game.grid.next_generation
-        with_fake_output do
-          @game.iterate_once
-          expect(@game.grid).to eq(expected_grid)
-        end
+        @game.iterate_once
+        expect(@game.grid).to eq(expected_grid)
       end
     end
 
-    describe "running the main loop" do
-      it "runs until the grid is empty" do
-        fake_file = StringIO.new("@\n@\n")
-        allow(File).to receive(:open).with("test_state.txt").and_return(fake_file)
+    it "runs until the grid is empty" do
+      fake_file_read("short_duration_state.txt", "@\n@\n")
+      @game = Game.new("short_duration_state.txt", MockTerminalDisplay.new)
 
-        @game = Game.new("test_state.txt")
+      @game.run_loop
 
-        with_fake_output do
-          @game.run_loop
-          expect(@game.grid.empty?).to be true
-        end
-      end
+      expect(@game.grid.empty?).to be true
     end
   end
-end
 
+end

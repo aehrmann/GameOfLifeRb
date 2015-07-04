@@ -6,22 +6,25 @@ class TerminalDisplay
     @screen_rows, @screen_columns = IO.console.winsize
   end
 
-  def clear_and_display_grid(grid)
-    display_blank_screen
-    display_grid
-    clear_screen
-  end
-
   def display_grid(grid)
     $stdout.write GridFormatter.as_string(grid)
+  end
+
+  def clear_screen
+    display_clear_escape_code
+    display_blank_screen
+  end
+
+  def display_clear_escape_code
+    $stdout.write "\e[1;1H"
   end
 
   def display_blank_screen
     $stdout.write ((' ') * (@screen_columns)) * @screen_rows
   end
 
-  def clear_screen
-   $stdout.write "\e[1;1H"
+  def pause
+    Kernel.sleep 0.1
   end
 end
 
