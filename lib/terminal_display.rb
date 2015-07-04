@@ -7,15 +7,21 @@ class TerminalDisplay
   end
 
   def clear_and_display_grid(grid)
-    $stdout.write (blank_screen_string + GridFormatter.as_string(grid) + clear_screen_escape_code)
+    display_blank_screen
+    display_grid
+    clear_screen
   end
 
-  def blank_screen_string
-    ((' ') * (@screen_columns)) * @screen_rows
+  def display_grid(grid)
+    $stdout.write GridFormatter.as_string(grid)
   end
 
-  def clear_screen_escape_code
-    "\e[1;1H"
+  def display_blank_screen
+    $stdout.write ((' ') * (@screen_columns)) * @screen_rows
+  end
+
+  def clear_screen
+   $stdout.write "\e[1;1H"
   end
 end
 
