@@ -6,11 +6,11 @@ class Grid
 
   Cell = Struct.new(:alive)
 
-  attr_reader :cells, :rules
-  attr_accessor :width, :height
+  attr_reader :cells, :rules, :width, :height
 
-  def initialize(cells = nil)
+  def initialize(cells: nil, width: 1, height: 1)
     @cells = cells || {}
+    @width, @height = width, height
     @rules = CellRules.new(self)
   end
 
@@ -27,14 +27,11 @@ class Grid
   end
 
   def copy
-    grid = Grid.new(self.cells.dup)
-    grid.width = self.width
-    grid.height = self.height
-    grid
+    Grid.new(cells: self.cells.dup, width: self.width, height: self.height)
   end
 
   def locations_to_update
-    cells.keys.reduce([]) do |locations_to_update, location|
+    locations.reduce([]) do |locations_to_update, location|
       locations_to_update << location if rules.should_change_status?(location)
       locations_to_update
     end
@@ -59,11 +56,7 @@ class Grid
   end
 
   def update_cell_at_location(location)
-    if alive_at?(location)
-      set_dead_at(location)
-    else
-      set_living_at(location)
-    end
+    alive_at?(location) ? set_dead_at(location) : set_living_at(location)
     add_all_neighbor_locations_of(location)
   end
 
@@ -88,7 +81,7 @@ class Grid
   end
 
   def number_of_living_cells
-    cells.values.count { |cell| cell.alive }
+    locations.count { |location| alive_at?(location) }
   end
 
   def number_of_living_neighbors(location)
