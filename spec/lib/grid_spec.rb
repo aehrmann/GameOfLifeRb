@@ -2,15 +2,37 @@ require 'grid'
 require 'cell_rules'
 require 'grid_formatter'
 
-describe Grid do
-  def empty_grid
+module GridSpecHelpers
+
+  def self.empty_grid
     GridBuilder.empty_grid
   end
 
-  let(:a_location) { Location.new(1, 1) }
+  def self.locations_for_ranges(row_range, column_range)
+    locations = []
+    row_range.each do |row|
+      column_range.each do |column|
+        locations << Location.new(row, column)
+      end
+    end
+    locations
+  end
+
+  def self.locations_for_pairs(pairs)
+    locations = []
+    pairs.each do |(row, column)|
+      locations << Location.new(row, column)
+    end
+    locations
+  end
+end
+
+describe Grid do
+
 
   before(:each) do
-    @fresh_grid = empty_grid
+    @fresh_grid = GridSpecHelpers::empty_grid
+    @test_location = Location.new(1, 1) 
   end
 
   describe "the attributes of a grid" do
@@ -29,8 +51,8 @@ describe Grid do
 
   describe "#set_living_at" do
     it "creates a living cell at a given location" do
-      @fresh_grid.set_living_at(a_location)
-      expect(@fresh_grid.alive_at?(a_location)).to be true
+      @fresh_grid.set_living_at(@test_location)
+      expect(@fresh_grid.alive_at?(@test_location)).to be true
     end
   end
 
@@ -40,22 +62,22 @@ describe Grid do
 
       context "when there is a live cell at a location" do
         it "returns true" do
-          @fresh_grid.set_living_at(a_location)
-          expect(@fresh_grid.alive_at?(a_location)).to be true
+          @fresh_grid.set_living_at(@test_location)
+          expect(@fresh_grid.alive_at?(@test_location)).to be true
         end
       end
 
       context "when there is a dead cell at a location" do
         it "returns false" do
-          @fresh_grid.set_living_at(a_location)
-          @fresh_grid.set_dead_at(a_location)
-          expect(@fresh_grid.alive_at?(a_location)).to be false
+          @fresh_grid.set_living_at(@test_location)
+          @fresh_grid.set_dead_at(@test_location)
+          expect(@fresh_grid.alive_at?(@test_location)).to be false
         end
       end
 
       context "when there is no cell at a location" do
         it "returns false" do
-          expect(@fresh_grid.alive_at?(a_location)).to be false
+          expect(@fresh_grid.alive_at?(@test_location)).to be false
         end
       end
     end
@@ -64,19 +86,19 @@ describe Grid do
 
       context "when there is no cell at a location" do
         it "returns false" do
-          expect(@fresh_grid.exists_at?(a_location)).to be false
+          expect(@fresh_grid.exists_at?(@test_location)).to be false
         end
       end
 
       context "when there is a cell at a location" do
         it "returns true if the cell is alive" do
-          @fresh_grid.set_living_at(a_location)
-          expect(@fresh_grid.alive_at?(a_location)).to be true
+          @fresh_grid.set_living_at(@test_location)
+          expect(@fresh_grid.alive_at?(@test_location)).to be true
         end
 
         it "returns true if the cell is dead" do
-          @fresh_grid.set_dead_at(a_location)
-          expect(@fresh_grid.exists_at?(a_location)).to be true
+          @fresh_grid.set_dead_at(@test_location)
+          expect(@fresh_grid.exists_at?(@test_location)).to be true
         end
       end
     end
@@ -86,17 +108,16 @@ describe Grid do
 
     context "when there are no living cells" do
       it "returns 0" do
-        expect(empty_grid.number_of_living_neighbors(a_location)).to eq(0)
+        expect(GridSpecHelpers::empty_grid.number_of_living_neighbors(@test_location)).to eq(0)
       end
     end
 
     context "when at least one of the neighboring locations has a living cell" do
       it "returns the number of locations with living neighbors" do
-        grid = empty_grid
-        location = Location.new(1, 1)
-        grid.set_living_at(Location.new(1, 2))
+        grid = GridSpecHelpers::empty_grid
+        grid.set_living_at(Location.new(1, 1))
 
-        expect(grid.number_of_living_neighbors(location)).to eq(1)
+        expect(grid.number_of_living_neighbors(Location.new(1, 2))).to eq(1)
       end
     end
   end
@@ -109,17 +130,29 @@ describe Grid do
       end
 
       it "returns true when all existing cells are dead" do
-        @fresh_grid.set_living_at(a_location)
-        @fresh_grid.set_dead_at(a_location)
+        @fresh_grid.set_living_at(@test_location)
+        @fresh_grid.set_dead_at(@test_location)
         expect(@fresh_grid.empty?).to be true
       end
     end
 
     context "when there is at least one living cell" do
       it "returns false" do
-        @fresh_grid.set_living_at(a_location)
+        @fresh_grid.set_living_at(@test_location)
         expect(@fresh_grid.empty?).to be false
       end
+    end
+  end
+
+  describe "#locations" do
+
+    it "returns the set of locations for all cells on the grid" do  
+      grid = GridBuilder.from_initial_state(["_@", 
+                                             "@@"])
+
+      expected_locations = GridSpecHelpers::locations_for_ranges((-1..2), (-1..2))
+
+      expect(grid.locations).to match_array(expected_locations)
     end
   end
 
@@ -137,22 +170,19 @@ describe Grid do
     context "when a cell is living" do
       context "and the cell has fewer than two living neighbors" do
         it "should be updated" do
-          expect(test_grid.locations_to_update).to include(Location.new(0, 0))
-          expect(test_grid.locations_to_update).to include(Location.new(0, 2))
+          expect(test_grid.locations_to_update).to include(*GridSpecHelpers::locations_for_pairs([[0, 0], [0, 2]]))
         end
       end
 
       context "and the cell has either two or three living neighbors" do
         it "should not be updated" do
-          expect(test_grid.locations_to_update).not_to include(Location.new(0, 3))
-          expect(test_grid.locations_to_update).not_to include(Location.new(3, 5))
+          expect(test_grid.locations_to_update).not_to include(*GridSpecHelpers::locations_for_pairs([[0, 3], [3, 5]]))
         end
       end
 
       context "and the cell has more than three neighbors" do
         it "should be updated" do
-          expect(test_grid.locations_to_update).to include(Location.new(2, 2))
-          expect(test_grid.locations_to_update).to include(Location.new(3, 3))
+        expect(test_grid.locations_to_update).to include(*GridSpecHelpers::locations_for_pairs([[2, 2], [3, 3]]))
         end
       end
     end
@@ -168,7 +198,7 @@ describe Grid do
 
   describe "#next_generation" do
 
-    it "generates the next generation of cells" do
+    fit "generates the next generation of cells" do
       glider_grid = GridBuilder.from_initial_state([
         "_@_",
         "__@",
@@ -177,13 +207,7 @@ describe Grid do
 
       next_grid = glider_grid.next_generation
 
-      expected_living_locations = [
-        Location.new(1, 0),
-        Location.new(1, 2),
-        Location.new(2, 1),
-        Location.new(2, 2),
-        Location.new(3, 1)
-      ]
+      expected_living_locations = next_grid.locations.select { |location| next_grid.alive_at?(location) }
 
       expected_living_locations.each do |location|
         expect(next_grid.alive_at?(location)).to be true

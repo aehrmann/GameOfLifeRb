@@ -40,6 +40,10 @@ class Grid
     end
   end
 
+  def locations
+    cells.keys
+  end
+
   def add_all_neighbor_locations_of(location)
     location.neighboring_locations.each do |neighboring_location|
       set_dead_at(neighboring_location) if !alive_at?(neighboring_location)
