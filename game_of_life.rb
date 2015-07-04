@@ -7,4 +7,5 @@ require_relative 'lib/grid_builder'
 require_relative 'lib/grid'
 require_relative 'lib/game'
 
-Game.new(ARGV[0]).run_loop
+p ARGV
+Game.new(ARGV[1]).run_loop
