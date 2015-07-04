@@ -14,6 +14,10 @@ class Grid
     @rules = CellRules.new(self)
   end
 
+  def copy
+    Grid.new(cells: self.cells.dup, width: self.width, height: self.height)
+  end
+
   def next_generation
     next_grid = self.copy
     
@@ -24,10 +28,6 @@ class Grid
     next_grid.remove_irrelevant_locations
 
     next_grid
-  end
-
-  def copy
-    Grid.new(cells: self.cells.dup, width: self.width, height: self.height)
   end
 
   def locations_to_update

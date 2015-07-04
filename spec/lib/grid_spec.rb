@@ -1,37 +1,12 @@
 require 'grid'
 require 'cell_rules'
 require 'grid_formatter'
+require_relative './helpers/grid_helpers'
 
-module GridSpecHelpers
-
-  def self.empty_grid
-    GridBuilder.empty_grid
-  end
-
-  def self.locations_for_ranges(row_range, column_range)
-    locations = []
-    row_range.each do |row|
-      column_range.each do |column|
-        locations << Location.new(row, column)
-      end
-    end
-    locations
-  end
-
-  def self.locations_for_pairs(pairs)
-    locations = []
-    pairs.each do |(row, column)|
-      locations << Location.new(row, column)
-    end
-    locations
-  end
-end
 
 describe Grid do
-
-
   before(:each) do
-    @fresh_grid = GridSpecHelpers::empty_grid
+    @fresh_grid = GridHelpers::empty_grid
     @test_location = Location.new(1, 1) 
   end
 
@@ -108,13 +83,13 @@ describe Grid do
 
     context "when there are no living cells" do
       it "returns 0" do
-        expect(GridSpecHelpers::empty_grid.number_of_living_neighbors(@test_location)).to eq(0)
+        expect(GridHelpers::empty_grid.number_of_living_neighbors(@test_location)).to eq(0)
       end
     end
 
     context "when at least one of the neighboring locations has a living cell" do
       it "returns the number of locations with living neighbors" do
-        grid = GridSpecHelpers::empty_grid
+        grid = GridHelpers::empty_grid
         grid.set_living_at(Location.new(1, 1))
 
         expect(grid.number_of_living_neighbors(Location.new(1, 2))).to eq(1)
@@ -150,7 +125,7 @@ describe Grid do
       grid = GridBuilder.from_initial_state(["_@", 
                                              "@@"])
 
-      expected_locations = GridSpecHelpers::locations_for_ranges((-1..2), (-1..2))
+      expected_locations = GridHelpers::locations_for_ranges((-1..2), (-1..2))
 
       expect(grid.locations).to match_array(expected_locations)
     end
@@ -170,19 +145,19 @@ describe Grid do
     context "when a cell is living" do
       context "and the cell has fewer than two living neighbors" do
         it "should be updated" do
-          expect(test_grid.locations_to_update).to include(*GridSpecHelpers::locations_for_pairs([[0, 0], [0, 2]]))
+          expect(test_grid.locations_to_update).to include(*GridHelpers::locations_for_pairs([[0, 0], [0, 2]]))
         end
       end
 
       context "and the cell has either two or three living neighbors" do
         it "should not be updated" do
-          expect(test_grid.locations_to_update).not_to include(*GridSpecHelpers::locations_for_pairs([[0, 3], [3, 5]]))
+          expect(test_grid.locations_to_update).not_to include(*GridHelpers::locations_for_pairs([[0, 3], [3, 5]]))
         end
       end
 
       context "and the cell has more than three neighbors" do
         it "should be updated" do
-        expect(test_grid.locations_to_update).to include(*GridSpecHelpers::locations_for_pairs([[2, 2], [3, 3]]))
+        expect(test_grid.locations_to_update).to include(*GridHelpers::locations_for_pairs([[2, 2], [3, 3]]))
         end
       end
     end
