@@ -14,7 +14,7 @@ class Grid
     @rules = CellRules.new(self)
   end
 
-  def tick
+  def next_generation
     next_grid = self.copy
     
     locations_to_update.each do |location|
@@ -40,9 +40,9 @@ class Grid
     end
   end
 
-  def add_nonexistent_neighboring_locations(location)
+  def add_all_neighbor_locations_of(location)
     location.neighboring_locations.each do |neighboring_location|
-      add_dead_cell_at(neighboring_location) if !cell_exists_at?(neighboring_location)
+      set_dead_at(neighboring_location) if !alive_at?(neighboring_location)
     end
   end
 
@@ -55,27 +55,27 @@ class Grid
   end
 
   def update_cell_at_location(location)
-    if live_cell_at?(location)
-      add_dead_cell_at(location)
+    if alive_at?(location)
+      set_dead_at(location)
     else
-      add_live_cell_at(location)
+      set_living_at(location)
     end
-    add_nonexistent_neighboring_locations(location)
+    add_all_neighbor_locations_of(location)
   end
 
-  def add_live_cell_at(location)
+  def set_living_at(location)
     cells[location] = Cell.new(true)
   end
 
-  def add_dead_cell_at(location)
+  def set_dead_at(location)
     cells[location] = Cell.new(false)
   end
 
-  def live_cell_at?(location)
-    cell_exists_at?(location) && cells[location].alive
+  def alive_at?(location)
+    exists_at?(location) && cells[location].alive
   end
 
-  def cell_exists_at?(location)
+  def exists_at?(location)
     !cells[location].nil?
   end
 
@@ -89,7 +89,7 @@ class Grid
 
   def number_of_living_neighbors(location)
     location.neighboring_locations.reduce(0) do |count_living, neighboring_location|
-      count_living += 1 if live_cell_at?(neighboring_location)
+      count_living += 1 if alive_at?(neighboring_location)
       count_living
     end
   end

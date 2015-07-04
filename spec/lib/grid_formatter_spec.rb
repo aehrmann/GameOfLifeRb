@@ -49,7 +49,7 @@ describe GridFormatter do
     end
 
     it "displays the grid's next generation as a string" do
-      next_grid = test_grid.tick
+      next_grid = test_grid.next_generation
       formatter_output = GridFormatter.as_string(next_grid)
       expected_output =<<-eos.gsub(/^\s+/, '')
       ============================================================

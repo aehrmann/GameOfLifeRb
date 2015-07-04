@@ -5,7 +5,7 @@ class CellRules
   end
 
   def should_change_status?(location)
-    if grid.live_cell_at?(location)
+    if grid.alive_at?(location)
       cell_dies_in_next_generation?(location)
     else
       cell_comes_to_life_in_next_generation?(location)

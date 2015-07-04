@@ -57,7 +57,7 @@ describe Game do
       end
 
       it "generates a new grid" do
-        expected_grid = @game.grid.tick
+        expected_grid = @game.grid.next_generation
         with_fake_output do
           @game.iterate_once
           expect(@game.grid).to eq(expected_grid)

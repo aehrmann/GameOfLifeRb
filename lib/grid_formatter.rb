@@ -9,7 +9,7 @@ class GridFormatter
 
     character_matrix = self.new_character_matrix 
     grid.cells.keys.each do |location|
-      if grid.live_cell_at?(location)
+      if grid.alive_at?(location)
         current_offset_row = location.row + TOP_OFFSET
         current_offset_column = location.column + LEFT_OFFSET
         if self.within_bounds?(current_offset_row, current_offset_column)

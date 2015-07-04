@@ -18,7 +18,7 @@ class Game
   def iterate_once
     sleep 0.1
     clear_and_display_grid
-    self.grid = self.grid.tick
+    self.grid = self.grid.next_generation
   end
 
   private

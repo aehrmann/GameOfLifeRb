@@ -8,8 +8,8 @@ module GridBuilder
     grid = Grid.new
 
     self.with_location_character_pairs(initial_state) do |location, character|
-      grid.add_live_cell_at(location) if character == LIVING_CELL_CHARACTER
-      grid.add_nonexistent_neighboring_locations(location)
+      grid.set_living_at(location) if character == LIVING_CELL_CHARACTER
+      grid.add_all_neighbor_locations_of(location)
     end
 
     grid.width = initial_state[0].length
@@ -32,7 +32,7 @@ module GridBuilder
     end
   end
 
-  def self.add_nonexistent_neighboring_locations(grid, location)
+  def self.add_all_neighbor_locaitons(grid, location)
     location.neighboring_locations.each do |neighboring_location|
       grid.add_dead_cell_at(neighboring_location) if !grid.cell_exists_at?(neighboring_location)
     end

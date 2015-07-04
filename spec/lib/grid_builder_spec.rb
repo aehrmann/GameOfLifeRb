@@ -36,7 +36,7 @@ describe GridBuilder do
         ]
 
         padded_locations.each do |location|
-          expect(@test_grid.cell_exists_at?(location)).to be true
+          expect(@test_grid.exists_at?(location)).to be true
         end
       end
     end
