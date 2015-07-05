@@ -65,6 +65,15 @@ describe TerminalDisplay do
     end
   end
 
+  describe "displaying the number of generations" do
+    it "displays the number of generations" do
+      with_fake_output do |output|
+        @terminal.display_number_of_generations(2)
+        expect(output.string).to match(/Generations: \d+/)
+      end
+    end
+  end
+
   describe "pausing" do
     it "calls system sleep" do
       allow(Kernel).to receive(:sleep)

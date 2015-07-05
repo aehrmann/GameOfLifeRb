@@ -34,6 +34,10 @@ describe Game do
         expect(@game.display.display_grid_was_called).to be true
       end
 
+      it "outputs how many generations have been generated" do
+        expect(@game.display.display_number_of_generations_was_called).to be true
+      end
+
       it "outputs the current grid" do
         expect(@game.display.display_grid_was_called).to be true
       end
@@ -52,6 +56,12 @@ describe Game do
         expected_grid = @game.grid.next_generation
         @game.iterate_once
         expect(@game.grid).to eq(expected_grid)
+      end
+
+      it "stores the number of generations that have passed" do
+        expect(@game.generations).to eq(0)
+        @game.iterate_once
+        expect(@game.generations).to eq(1)
       end
     end
 

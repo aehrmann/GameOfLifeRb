@@ -20,13 +20,9 @@ class Grid
 
   def next_generation
     next_grid = self.copy
-    
     locations_to_update.each do |location|
       next_grid.update_cell_at_location(location)
     end
-
-    next_grid.remove_irrelevant_locations
-
     next_grid
   end
 
