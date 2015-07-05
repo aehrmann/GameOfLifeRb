@@ -10,14 +10,19 @@ class Game
   end
 
   def run_loop
-    until self.grid.empty?
-      iterate_once
+    begin
+      until self.grid.empty?
+        iterate_once
+      end
+    rescue Interrupt
+      puts "Goodbye!"
     end
   end
 
   def iterate_once
     display.pause
     display.clear_screen
+    display.display_number_of_living_cells(self.grid)
     display.display_grid(self.grid)
     self.grid = self.grid.next_generation
   end

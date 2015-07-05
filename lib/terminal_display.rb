@@ -10,6 +10,13 @@ class TerminalDisplay
     $stdout.write GridFormatter.as_string(grid)
   end
 
+
+  def display_number_of_living_cells(grid)
+    living_cells_string = 'Living Cells: ' + grid.number_of_living_cells.to_s
+    left_padding_length = 30 - (living_cells_string.length / 2)
+    $stdout.write (' ' * left_padding_length) + (living_cells_string) + "\n"
+  end
+
   def clear_screen
     display_clear_escape_code
     display_blank_screen

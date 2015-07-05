@@ -30,6 +30,10 @@ describe Game do
         @game.iterate_once
       end
 
+      it "outputs the number of living cells" do
+        expect(@game.display.display_grid_was_called).to be true
+      end
+
       it "outputs the current grid" do
         expect(@game.display.display_grid_was_called).to be true
       end

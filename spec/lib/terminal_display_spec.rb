@@ -56,6 +56,15 @@ describe TerminalDisplay do
     end
   end
 
+  describe "displaying the number of living cells" do
+    it "displays the number of living cells" do
+      with_fake_output do |output|
+        @terminal.display_number_of_living_cells(glider)
+        expect(output.string).to match(/Living Cells: \d+/)
+      end
+    end
+  end
+
   describe "pausing" do
     it "calls system sleep" do
       allow(Kernel).to receive(:sleep)
