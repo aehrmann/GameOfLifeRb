@@ -188,16 +188,6 @@ describe Grid do
         expect(next_grid.alive_at?(location)).to be true
       end
     end
-
-    it "removes the irrelevant cells from the grid" do
-      grid = GridBuilder.from_initial_state([
-        "__",
-        "@@"
-      ])
-      next_grid = grid.next_generation
-
-      expect(next_grid.cells.empty?).to be true
-    end
   end
 
   describe "#add_all_neighbor_locations_of" do

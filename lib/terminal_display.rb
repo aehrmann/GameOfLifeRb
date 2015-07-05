@@ -35,7 +35,7 @@ class TerminalDisplay
   end
 
   def pause
-    Kernel.sleep 0.1
+    Kernel.sleep 0.2
   end
 
   private
