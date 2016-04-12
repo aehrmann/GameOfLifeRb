@@ -7,4 +7,9 @@ require_relative 'lib/grid_builder'
 require_relative 'lib/grid'
 require_relative 'lib/game'
 
+if ARGV[0].nil?
+  puts "Please choose a starting state from the states directory."
+  exit
+end
+
 Game.new(ARGV[0]).run_loop
